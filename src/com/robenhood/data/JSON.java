@@ -1,11 +1,9 @@
 package com.robenhood.data;
-import java.util.regex.*;
-public class JSON {
-    public JSON(String input)
-    {
+import java.util.HashMap;
 
-        String out = "";
-        int indent = 0;
-        out = input.replaceAll("({)|(})|(,)|([)|(])","{\n");
+public class JSON extends HashMap<String, Object> {
+
+    public JSON() {
     }
+
 }
