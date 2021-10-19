@@ -7,6 +7,7 @@
      <void property="text">
       <string>- cryptos: ArrayList&lt;Assets&gt;
 - name: String
+- balance: double
 - orderManager: OrderManager
 - logoffTime: DateTime
 - loginTime: DateTime</string>
@@ -18,8 +19,8 @@
 + load(ArrayList&lt;double&gt;): void
 + getPortfolioValue: double
 + getAssets: Asset  [ ]
-+ updateTransactionHistory(): void
-+ clone(): 
++ clone(): Portfolio
++ update(): void
 </string>
      </void>
     </void>
@@ -149,7 +150,8 @@
 + getPortfolio: Portfolio
 + savePortfolio: void
 + loadPortfolio: void
-+ addOrder(): void</string>
++ addOrder(): void
++ update(): void</string>
      </void>
     </void>
     <void property="name">
@@ -292,7 +294,7 @@
      <string>x</string>
      <void method="set">
       <object idref="Point2D$Double6"/>
-      <double>440.0</double>
+      <double>460.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
@@ -303,7 +305,7 @@
      </void>
     </void>
     <void method="setLocation">
-     <double>440.0</double>
+     <double>460.0</double>
      <double>430.0</double>
     </void>
    </object>
@@ -340,12 +342,12 @@
      <string>y</string>
      <void method="set">
       <object idref="Point2D$Double7"/>
-      <double>80.0</double>
+      <double>90.0</double>
      </void>
     </void>
     <void method="setLocation">
      <double>1060.0</double>
-     <double>80.0</double>
+     <double>90.0</double>
     </void>
    </object>
   </void>
