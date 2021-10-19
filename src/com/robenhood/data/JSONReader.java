@@ -26,13 +26,13 @@ public class JSONReader {
                         keyString = keyString.substring(keyString.indexOf('"'), keyString.lastIndexOf('"'));
 
                         String valueString = json.substring(json.indexOf('{', i));
-                        int subDepth = 1, index=1;
+                        int subDepth = 1, index = 1;
 
-                        }
-
-                        ret.put(keyString, valueString, indent + 4));
                     }
+
+//                        ret.put(keyString, valueString, indent + 4);
             }
+
             i++;
         }
 
