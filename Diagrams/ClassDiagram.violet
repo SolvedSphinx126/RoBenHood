@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="11.0.10" class="java.beans.XMLDecoder">
+<java version="13.0.1" class="java.beans.XMLDecoder">
  <object class="com.horstmann.violet.ClassDiagramGraph">
   <void method="addNode">
    <object class="com.horstmann.violet.ClassNode" id="ClassNode0">
@@ -77,19 +77,19 @@
      <string>x</string>
      <void method="set">
       <object idref="Point2D$Double1"/>
-      <double>260.0</double>
+      <double>350.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>y</string>
      <void method="set">
       <object idref="Point2D$Double1"/>
-      <double>80.0</double>
+      <double>50.0</double>
      </void>
     </void>
     <void method="setLocation">
-     <double>260.0</double>
-     <double>80.0</double>
+     <double>350.0</double>
+     <double>50.0</double>
     </void>
    </object>
   </void>
@@ -103,7 +103,7 @@
     </void>
     <void property="methods">
      <void property="text">
-      <string>+ getCryptoValue(Crypto): double
+      <string>+ getCryptoValue(Crypto, DateTime): double
 + getHistory(Crypto): double [ ]</string>
      </void>
     </void>
@@ -118,7 +118,7 @@
      <string>x</string>
      <void method="set">
       <object idref="Point2D$Double2"/>
-      <double>700.0</double>
+      <double>670.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
@@ -129,7 +129,7 @@
      </void>
     </void>
     <void method="setLocation">
-     <double>700.0</double>
+     <double>670.0</double>
      <double>330.0</double>
     </void>
    </object>
@@ -165,7 +165,7 @@
      <string>x</string>
      <void method="set">
       <object idref="Point2D$Double3"/>
-      <double>80.0</double>
+      <double>90.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
@@ -176,7 +176,7 @@
      </void>
     </void>
     <void method="setLocation">
-     <double>80.0</double>
+     <double>90.0</double>
      <double>510.0</double>
     </void>
    </object>
@@ -279,7 +279,7 @@
     <void property="methods">
      <void property="text">
       <string>+ addOrder(): void
-+ updateOrders(HasMap&lt;DateTime, Integer&gt;): void
++ updateOrders(HasMap&lt;DateTime, double&gt;): void
 + executeOrders(): void
 + getTransactions(): ArrayList&lt;Transactions&gt;</string>
      </void>
@@ -302,12 +302,12 @@
      <string>y</string>
      <void method="set">
       <object idref="Point2D$Double6"/>
-      <double>560.0</double>
+      <double>550.0</double>
      </void>
     </void>
     <void method="setLocation">
      <double>820.0</double>
-     <double>560.0</double>
+     <double>550.0</double>
     </void>
    </object>
   </void>
@@ -356,13 +356,13 @@
    <object class="com.horstmann.violet.ClassNode" id="ClassNode8">
     <void property="attributes">
      <void property="text">
-      <string>- buy: boolean
-- price: double
-- createTime: DateTime
-- expireTime: DateTime
-- crypto: Crypto
-- transaction: Transaction
-- type: String</string>
+      <string># buy: boolean
+# price: double
+# createTime: DateTime
+# expireTime: DateTime
+# crypto: Crypto
+# transaction: Transaction
+# type: String</string>
      </void>
     </void>
     <void property="methods">
@@ -372,7 +372,7 @@
 + cancel() void
 + setPrice() void
 + setExpire() void
-+ getCurrentPrice()</string>
++ getCurrentPrice(DateTime time): double</string>
      </void>
     </void>
     <void property="name">
@@ -421,19 +421,19 @@
      <string>x</string>
      <void method="set">
       <object idref="Point2D$Double9"/>
-      <double>1360.0</double>
+      <double>1390.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>y</string>
      <void method="set">
       <object idref="Point2D$Double9"/>
-      <double>350.0</double>
+      <double>340.0</double>
      </void>
     </void>
     <void method="setLocation">
-     <double>1360.0</double>
-     <double>350.0</double>
+     <double>1390.0</double>
+     <double>340.0</double>
     </void>
    </object>
   </void>
@@ -442,7 +442,7 @@
     <void property="methods">
      <void property="text">
       <string>+ makeOrder(): void
-+ executeOrder(): void</string>
++ executeOrder(): Transaction</string>
      </void>
     </void>
     <void property="name">
@@ -456,19 +456,19 @@
      <string>x</string>
      <void method="set">
       <object idref="Point2D$Double10"/>
-      <double>1360.0</double>
+      <double>1390.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>y</string>
      <void method="set">
       <object idref="Point2D$Double10"/>
-      <double>250.0</double>
+      <double>240.0</double>
      </void>
     </void>
     <void method="setLocation">
-     <double>1360.0</double>
-     <double>250.0</double>
+     <double>1390.0</double>
+     <double>240.0</double>
     </void>
    </object>
   </void>
@@ -522,6 +522,9 @@
   </void>
   <void method="connect">
    <object class="com.horstmann.violet.ClassRelationshipEdge">
+    <void property="bentStyle">
+     <object class="com.horstmann.violet.BentStyle" field="HVH"/>
+    </void>
     <void property="endArrowHead">
      <object class="com.horstmann.violet.ArrowHead" field="V"/>
     </void>
@@ -562,7 +565,7 @@
   <void method="connect">
    <object class="com.horstmann.violet.ClassRelationshipEdge">
     <void property="bentStyle">
-     <object class="com.horstmann.violet.BentStyle" field="VHV"/>
+     <object class="com.horstmann.violet.BentStyle" field="HV"/>
     </void>
     <void property="endLabel">
      <string>*</string>
