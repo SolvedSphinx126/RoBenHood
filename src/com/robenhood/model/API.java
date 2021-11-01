@@ -1,14 +1,13 @@
-package com.robenhood.data;
+package com.robenhood.model;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
 
 
-public class ApiGetter {
+public class API {
     public static void main(String[] args) throws MalformedURLException {
         URL url = new URL("https://api.cryptowat.ch/markets/kraken/btceur/price");
 
