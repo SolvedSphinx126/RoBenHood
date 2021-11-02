@@ -12,6 +12,7 @@ public class LimitTrade extends Order {
         this.buy = buy;
         this.expireTime = expireTime;
         this.crypto = crypto;
+        this.price = price;
     }
 
     @Override
