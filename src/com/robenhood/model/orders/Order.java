@@ -3,6 +3,7 @@ package com.robenhood.model.orders;
 import com.robenhood.model.Crypto;
 import com.robenhood.model.Transaction;
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 
 public abstract class Order {
     protected boolean buy;
@@ -12,8 +13,9 @@ public abstract class Order {
     protected Crypto crypto;
     protected Transaction transaction;
     protected String type;
+    protected double amount;
 
-    public abstract void makeOrder();
+    public abstract void makeOrder(HashMap<OffsetDateTime, Double> data);
 
     public abstract Transaction executeOrder();
 

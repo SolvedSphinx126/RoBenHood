@@ -7,12 +7,14 @@ public class Transaction {
     private Crypto crypto;
     private double price;
     private double amount;
+    private boolean buy;
 
-    public Transaction(OffsetDateTime time, Crypto crypto, double price, double amount) {
+    public Transaction(OffsetDateTime time, Crypto crypto, double price, double amount, boolean buy) {
         this.time = time;
         this.crypto = crypto;
         this.price = price;
         this.amount = amount;
+        this.buy = buy;
     }
 
     public OffsetDateTime getTime() {
