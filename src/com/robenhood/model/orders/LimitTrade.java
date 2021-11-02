@@ -2,7 +2,6 @@ package com.robenhood.model.orders;
 
 import com.robenhood.model.Crypto;
 import com.robenhood.model.Transaction;
-
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,27 +15,22 @@ public class LimitTrade extends Order {
         this.crypto = crypto;
         this.price = price;
         this.amount = amount;
+        createTime = OffsetDateTime.now();
     }
 
     @Override
     public void makeOrder(HashMap<OffsetDateTime, Double> data) {
-        if (buy) {
-            for (Map.Entry<OffsetDateTime, Double> entry : data.entrySet()) {
-                if (entry.getValue() <= price) {
-                    transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, true);
-                }
-            }
-        } else {
-            for (Map.Entry<OffsetDateTime, Double> entry : data.entrySet()) {
-                if (entry.getValue() >= price) {
-                    transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, false);
-                }
+        for (Map.Entry<OffsetDateTime, Double> entry : data.entrySet()) {
+            if (buy && entry.getValue() <= price && entry.getKey().isBefore(expireTime)) {
+                transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, true);
+            } else if (!buy && entry.getValue() >= price && entry.getKey().isBefore(expireTime)) {
+                transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, false);
             }
         }
     }
 
     @Override
     public Transaction executeOrder() {
-        return null;
+        return transaction;
     }
 }
