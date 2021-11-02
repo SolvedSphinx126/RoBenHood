@@ -35,7 +35,7 @@ public abstract class Order {
         this.expireTime = expireTime;
     }
 
-    public double getCurrentPrice(OffsetDateTime time) {
-        return crypto.getCurrentPrice();
+    public double getPrice(OffsetDateTime time) {
+        return crypto.getValue(time);
     }
 }

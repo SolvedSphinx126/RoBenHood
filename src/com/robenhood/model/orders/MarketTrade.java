@@ -4,7 +4,6 @@ import com.robenhood.model.Crypto;
 import com.robenhood.model.Transaction;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
-import java.util.Map;
 
 public class MarketTrade extends Order {
 
@@ -14,7 +13,7 @@ public class MarketTrade extends Order {
         this.crypto = crypto;
         this.amount = amount;
         createTime = OffsetDateTime.now();
-        this.price = getCurrentPrice(createTime);
+        this.price = getPrice(createTime);
     }
 
     @Override
