@@ -3,7 +3,6 @@ package com.robenhood.model;
 import com.robenhood.model.orders.LimitTrade;
 import com.robenhood.model.orders.MarketTrade;
 import com.robenhood.model.orders.Order;
-
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
