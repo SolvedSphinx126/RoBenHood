@@ -17,6 +17,19 @@ public abstract class Order {
 
     public abstract void makeOrder(HashMap<OffsetDateTime, Double> data);
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Order)) {
+            return false;
+        }
+
+        return createTime == ((Order) o).createTime;
+    }
+
     public abstract Transaction executeOrder();
 
     public void cancel() {
