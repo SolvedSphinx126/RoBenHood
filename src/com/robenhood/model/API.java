@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 
 
@@ -21,17 +22,15 @@ public class API {
 
     static String fetchAPI(URI uri)
     {
-        String jsonResponse = "";
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(uri.toURL().openStream(), "UTF-8"))) {
+        StringBuilder jsonResponse = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(uri.toURL().openStream(), StandardCharsets.UTF_8))) {
             for (String line; (line = reader.readLine()) != null;) {
-                jsonResponse += line;
+                jsonResponse.append(line);
             }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return jsonResponse;
+        return jsonResponse.toString();
     }
 
     public static double getCryptoValue(OffsetDateTime time, String symbol) {
