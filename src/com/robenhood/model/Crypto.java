@@ -27,7 +27,7 @@ public class Crypto {
     }
 
     public double getValue(OffsetDateTime time) {
-        return API.getCryptoValue(time, symbol);
+        return API.getCryptoValue(symbol, time);
     }
 
     public String getName() {

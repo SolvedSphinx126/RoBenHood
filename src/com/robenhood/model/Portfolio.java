@@ -1,6 +1,5 @@
 package com.robenhood.model;
 
-import javax.sound.sampled.Port;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
@@ -8,7 +7,7 @@ public class Portfolio {
     private ArrayList<Asset> assets;
     private ArrayList<Transaction> transactions;
     private String name;
-    private double balance;
+    private double balance, totalValue;
     private OrderManager orderManager;
     private OffsetDateTime logOnTime, logOffTime;
 
@@ -34,7 +33,13 @@ public class Portfolio {
 
         orderManager.executeOrders();
         transactions = orderManager.getTransactions();
+
         applyTransactions();
+
+        totalValue = 0;
+        for (Asset asset : assets) {
+            totalValue += asset.getValue();
+        }
     }
 
     private void applyTransactions() {
@@ -66,6 +71,10 @@ public class Portfolio {
                 currAsset.incrementAmount(-trans.getAmount());
                 balance += trans.getValue();
             }
+
+            // If the order did not execute because of insufficient balance it will still
+            // be removed.
+            transactions.remove(trans);
         }
     }
 
