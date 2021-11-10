@@ -21,6 +21,14 @@ public class Transaction {
         return time;
     }
 
+    public boolean getBuy() {
+        return buy;
+    }
+
+    public double getValue() {
+        return price * amount;
+    }
+
     public Crypto getCrypto() {
         return crypto;
     }
