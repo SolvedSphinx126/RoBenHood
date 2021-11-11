@@ -21,14 +21,12 @@ public class OrderManager {
             orders.add(new LimitTrade(buy, price, expireTime, crypto, amount));
         } else if (type.equals("Market Trade")) {
             orders.add(new MarketTrade(buy, crypto, amount));
-            System.out.println("Size of orders: " + orders.size());
         }
     }
 
     public ArrayList<Crypto> getLackingCryptos(ArrayList<Asset> assets) {
         boolean has = false;
         ArrayList<Crypto> lacking = new ArrayList<>();
-        System.out.println("Size of orders: " + orders.size());
         for (Order order : orders) {
             for (Asset asset : assets) {
                 if (asset.getCrypto().equals(order.getCrypto())) {

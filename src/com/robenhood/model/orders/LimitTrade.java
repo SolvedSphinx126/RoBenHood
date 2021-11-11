@@ -20,6 +20,7 @@ public class LimitTrade extends Order {
 
     @Override
     public void makeOrder(HashMap<OffsetDateTime, Double> data) {
+        System.out.println("Size of data: " + data.size());
         for (Map.Entry<OffsetDateTime, Double> entry : data.entrySet()) {
             if (buy && entry.getValue() <= price && entry.getKey().isBefore(expireTime)) {
                 transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, true);

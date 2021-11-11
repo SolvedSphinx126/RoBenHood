@@ -18,7 +18,9 @@ public class Portfolio {
         balance = 0;
         totalValue = 0;
         orderManager = new OrderManager();
-        timeSinceLastUpdate = OffsetDateTime.now();
+        logOnTime = OffsetDateTime.now();
+        logOffTime = OffsetDateTime.now();
+        timeSinceLastUpdate = logOffTime;
     }
 
     // Only for loading from file. Will need to make clone methods for all the
@@ -35,6 +37,7 @@ public class Portfolio {
     public void update() {
         // We must check to see if there are any orders for which we do not have assets yet
         // if so, add those assets to the list before proceeding
+        System.out.println("Time since last update: " + logOffTime.toString() + "\nCurrent time " + OffsetDateTime.now().toString());
         ArrayList<Crypto> lacking = orderManager.getLackingCryptos(assets);
         for (Crypto c : lacking) {
             assets.add(new Asset(c, 0));
@@ -57,23 +60,9 @@ public class Portfolio {
     }
 
     private void applyTransactions() {
-        boolean hasCrypto;
         Asset currAsset = null;
         ArrayList<Transaction> executed = new ArrayList<>();
         for (Transaction trans : transactions) {
-            hasCrypto = false;
-            // Check to see if the asset list contains the crypto for which we are making a transaction
-            for (Asset asset : assets) {
-                if ((asset.getCrypto().equals(trans.getCrypto()))) {
-                    hasCrypto = true;
-                    break;
-                }
-            }
-            // Add the new asset if it was not found already
-            if (!hasCrypto) {
-                assets.add(new Asset(trans.getCrypto(), 0));
-            }
-
             for (Asset asset : assets) {
                 if ((asset.getCrypto().equals(trans.getCrypto()))) {
                     currAsset = asset;
@@ -82,7 +71,7 @@ public class Portfolio {
             if (trans.getBuy() && balance >= trans.getValue()) {
                 balance -= trans.getValue();
                 currAsset.incrementAmount(trans.getAmount());
-            } else if (currAsset.getAmount() >= trans.getAmount()) {
+            } else if (!trans.getBuy() && currAsset.getAmount() >= trans.getAmount()) {
                 currAsset.incrementAmount(-trans.getAmount());
                 balance += trans.getValue();
             }
