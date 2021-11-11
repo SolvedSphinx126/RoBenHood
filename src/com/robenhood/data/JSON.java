@@ -1,3 +1,9 @@
+/**
+ *  @author Ben Morrison
+ *  Class to interpret JSON and mimic it.
+ *
+ *  */
+
 package com.robenhood.data;
 import java.math.BigInteger;
 import java.util.ArrayList;
