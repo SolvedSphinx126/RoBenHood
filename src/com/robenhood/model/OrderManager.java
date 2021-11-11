@@ -24,9 +24,27 @@ public class OrderManager {
         }
     }
 
+    public ArrayList<Crypto> getLackingCryptos(ArrayList<Asset> assets) {
+        boolean has = false;
+        ArrayList<Crypto> lacking = new ArrayList<>();
+        for (Order order : orders) {
+            for (Asset asset : assets) {
+                if (asset.getCrypto().equals(order.getCrypto())) {
+                    has = true;
+                    break;
+                }
+            }
+            if (!has) {
+                lacking.add(order.getCrypto());
+            }
+            has = false;
+        }
+        return lacking;
+    }
+
     // Updates all orders of a specific Crypto
-    public void updateOrders(Crypto crypto) {
-        HashMap<OffsetDateTime, Double> data = API.getHistory(crypto);
+    public void updateOrders(Crypto crypto, OffsetDateTime startTime, OffsetDateTime endTime) {
+        HashMap<OffsetDateTime, Double> data = API.getHistoryData(startTime, endTime, crypto.getSymbol());
         for (Order order : orders) {
             if (order.getCrypto().equals(crypto)) {
                 order.makeOrder(data);
@@ -35,11 +53,15 @@ public class OrderManager {
     }
 
     public void executeOrders() {
-        for (Order order: orders) {
+        ArrayList<Order> executed = new ArrayList<>();
+        for (Order order : orders) {
             if (order.executeOrder() != null) {
                 transactions.add(order.executeOrder());
-                orders.remove(order);
+                executed.add(order);
             }
+        }
+        for (Order order : executed) {
+            orders.remove(order);
         }
     }
 

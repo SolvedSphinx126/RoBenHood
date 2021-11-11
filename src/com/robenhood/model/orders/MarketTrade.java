@@ -20,9 +20,4 @@ public class MarketTrade extends Order {
     public void makeOrder(HashMap<OffsetDateTime, Double> data) {
         transaction = new Transaction(createTime, crypto, price, amount, buy);
     }
-
-    @Override
-    public Transaction executeOrder() {
-        return transaction;
-    }
 }
