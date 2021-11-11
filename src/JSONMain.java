@@ -1,4 +1,4 @@
-import com.robenhood.data.JSONReader;
+import com.robenhood.data.JSON;
 
 public class JSONMain {
     public static void main(String[] args) {
@@ -166,15 +166,13 @@ public class JSONMain {
                 "        }\n" +
                 "    }\n" +
                 "}";
+        String json2 = "{\"result\":{\"price\":56240.6},\"allowance\":{\"cost\":0.005,\"remaining\":9.995,\"upgrade\":\"For unlimited API access, create an account at https://cryptowat.ch\"}}";
 
-        System.out.println(trimString(json));
-        JSONReader.readJSON(trimString(json), 0);
-    }
-
-    public static String trimString(String json) {
-        String ret = "";
-        for (String s: json.split("\n"))
-            ret = ret + s.trim();
-        return ret;
+//        System.out.println(trimString(json));
+        JSON jsonObj = new JSON(json2);
+        System.out.println(jsonObj.toString().replace("=", ":"));
+//        for (String key: jsonObj.keySet()) {
+//            System.out.println(jsonObj.get(key));
+//        }
     }
 }
