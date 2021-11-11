@@ -21,12 +21,32 @@ public class OrderManager {
             orders.add(new LimitTrade(buy, price, expireTime, crypto, amount));
         } else if (type.equals("Market Trade")) {
             orders.add(new MarketTrade(buy, crypto, amount));
+            System.out.println("Size of orders: " + orders.size());
         }
+    }
+
+    public ArrayList<Crypto> getLackingCryptos(ArrayList<Asset> assets) {
+        boolean has = false;
+        ArrayList<Crypto> lacking = new ArrayList<>();
+        System.out.println("Size of orders: " + orders.size());
+        for (Order order : orders) {
+            for (Asset asset : assets) {
+                if (asset.getCrypto().equals(order.getCrypto())) {
+                    has = true;
+                    break;
+                }
+            }
+            if (!has) {
+                lacking.add(order.getCrypto());
+            }
+            has = false;
+        }
+        return lacking;
     }
 
     // Updates all orders of a specific Crypto
     public void updateOrders(Crypto crypto, OffsetDateTime startTime, OffsetDateTime endTime) {
-        HashMap<OffsetDateTime, Double> data = API.getHistory(crypto, startTime, endTime);
+        HashMap<OffsetDateTime, Double> data = API.getHistoryData(startTime, endTime, crypto.getSymbol());
         for (Order order : orders) {
             if (order.getCrypto().equals(crypto)) {
                 order.makeOrder(data);
@@ -35,11 +55,15 @@ public class OrderManager {
     }
 
     public void executeOrders() {
-        for (Order order: orders) {
+        ArrayList<Order> executed = new ArrayList<>();
+        for (Order order : orders) {
             if (order.executeOrder() != null) {
                 transactions.add(order.executeOrder());
-                orders.remove(order);
+                executed.add(order);
             }
+        }
+        for (Order order : executed) {
+            orders.remove(order);
         }
     }
 

@@ -30,7 +30,9 @@ public abstract class Order {
         return createTime == ((Order) o).createTime;
     }
 
-    public abstract Transaction executeOrder();
+    public Transaction executeOrder() {
+        return transaction;
+    }
 
     public Crypto getCrypto() {
         return crypto;

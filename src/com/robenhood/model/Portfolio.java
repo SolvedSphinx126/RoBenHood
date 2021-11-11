@@ -14,6 +14,10 @@ public class Portfolio {
     public Portfolio(String name) {
         this.name = name;
         assets = new ArrayList<>();
+        transactions = new ArrayList<>();
+        balance = 0;
+        totalValue = 0;
+        orderManager = new OrderManager();
         timeSinceLastUpdate = OffsetDateTime.now();
     }
 
@@ -29,6 +33,13 @@ public class Portfolio {
     }
 
     public void update() {
+        // We must check to see if there are any orders for which we do not have assets yet
+        // if so, add those assets to the list before proceeding
+        ArrayList<Crypto> lacking = orderManager.getLackingCryptos(assets);
+        for (Crypto c : lacking) {
+            assets.add(new Asset(c, 0));
+        }
+
         for (Asset asset : assets) {
             orderManager.updateOrders(asset.getCrypto(), timeSinceLastUpdate, OffsetDateTime.now());
         }
@@ -48,6 +59,7 @@ public class Portfolio {
     private void applyTransactions() {
         boolean hasCrypto;
         Asset currAsset = null;
+        ArrayList<Transaction> executed = new ArrayList<>();
         for (Transaction trans : transactions) {
             hasCrypto = false;
             // Check to see if the asset list contains the crypto for which we are making a transaction
@@ -77,6 +89,9 @@ public class Portfolio {
 
             // If the order did not execute because of insufficient balance it will still
             // be removed.
+            executed.add(trans);
+        }
+        for (Transaction trans : executed) {
             transactions.remove(trans);
         }
     }
@@ -95,6 +110,10 @@ public class Portfolio {
 
     public double getBalance() {
         return balance;
+    }
+
+    public void incrementBalance(double value) {
+        balance += value;
     }
 
     public void logIn() {

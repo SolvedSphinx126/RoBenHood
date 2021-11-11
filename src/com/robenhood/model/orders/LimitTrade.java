@@ -28,9 +28,4 @@ public class LimitTrade extends Order {
             }
         }
     }
-
-    @Override
-    public Transaction executeOrder() {
-        return transaction;
-    }
 }
