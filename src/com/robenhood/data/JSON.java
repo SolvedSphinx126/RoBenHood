@@ -1,4 +1,5 @@
 package com.robenhood.data;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -88,10 +89,8 @@ public class JSON extends HashMap<String, Object> {
 
                 case ',':
                     if (depth == 0) {  // This runs for each key/value pair
-                        if (json.lastIndexOf(":", i) > json.lastIndexOf("\"", i)) {
-                            elements.add(json.substring(lastComma + 1, i));  // Adds to the elements ArrayList for parsing
-                            lastComma = i;
-                        }
+                        elements.add(json.substring(lastComma + 1, i));  // Adds to the elements ArrayList for parsing
+                        lastComma = i;
                     }
                     break;
             }
@@ -168,6 +167,15 @@ public class JSON extends HashMap<String, Object> {
         return ret.toString();
     }
 
+    private static boolean isBigInteger(String string) {
+        try {
+            new BigInteger(string, 10);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     private static boolean isInteger(String string) {
         try {
             Integer.parseInt(string);
@@ -190,7 +198,7 @@ public class JSON extends HashMap<String, Object> {
         // This converts the string to the correct data type
         if (isInteger(s)) {
             return Integer.parseInt(s);
-        } else if (isDouble(s)) {
+        } else if (isDouble(s) && !isBigInteger(s)) {
             return Double.parseDouble(s);
         } else {
             return s;

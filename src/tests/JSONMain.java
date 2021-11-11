@@ -1,3 +1,5 @@
+package tests;
+
 import com.robenhood.data.JSON;
 
 public class JSONMain {
@@ -166,13 +168,15 @@ public class JSONMain {
                 "        }\n" +
                 "    }\n" +
                 "}";
+
         String json2 = "{\"result\":{\"price\":56240.6},\"allowance\":{\"cost\":0.005,\"remaining\":9.995,\"upgrade\":\"For unlimited API access, create an account at https://cryptowat.ch\"}}";
 
-//        System.out.println(trimString(json));
-        JSON jsonObj = new JSON(json2);
-        System.out.println(jsonObj.toString().replace("=", ":"));
-//        for (String key: jsonObj.keySet()) {
-//            System.out.println(jsonObj.get(key));
-//        }
+        System.out.println(new JSON(json));
+        for (int lcv = 0; lcv < 128; lcv++)
+            System.out.print("-");
+        System.out.println();
+
+        System.out.println(new JSON(json2));
+
     }
 }
