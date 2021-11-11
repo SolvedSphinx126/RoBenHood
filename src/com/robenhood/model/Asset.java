@@ -29,7 +29,7 @@ public class Asset {
     }
 
     public double getValue() {
-        return API.getCryptoValue(coin.getSymbol(), OffsetDateTime.now()) * amount;
+        return API.getCryptoValue(OffsetDateTime.now(), coin.getSymbol()) * amount;
     }
 
     public double getAverageValue() {

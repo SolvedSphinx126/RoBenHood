@@ -25,8 +25,8 @@ public class OrderManager {
     }
 
     // Updates all orders of a specific Crypto
-    public void updateOrders(Crypto crypto) {
-        HashMap<OffsetDateTime, Double> data = API.getHistory(crypto);
+    public void updateOrders(Crypto crypto, OffsetDateTime startTime, OffsetDateTime endTime) {
+        HashMap<OffsetDateTime, Double> data = API.getHistory(crypto, startTime, endTime);
         for (Order order : orders) {
             if (order.getCrypto().equals(crypto)) {
                 order.makeOrder(data);

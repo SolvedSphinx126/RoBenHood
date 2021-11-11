@@ -9,11 +9,12 @@ public class Portfolio {
     private String name;
     private double balance, totalValue;
     private OrderManager orderManager;
-    private OffsetDateTime logOnTime, logOffTime;
+    private OffsetDateTime logOnTime, logOffTime, timeSinceLastUpdate;
 
     public Portfolio(String name) {
         this.name = name;
         assets = new ArrayList<>();
+        timeSinceLastUpdate = OffsetDateTime.now();
     }
 
     // Only for loading from file. Will need to make clone methods for all the
@@ -24,11 +25,12 @@ public class Portfolio {
         this.balance = balance;
         orderManager = OM;
         this.logOffTime = logOffTime;
+        timeSinceLastUpdate = logOffTime;
     }
 
     public void update() {
         for (Asset asset : assets) {
-            orderManager.updateOrders(asset.getCrypto());
+            orderManager.updateOrders(asset.getCrypto(), timeSinceLastUpdate, OffsetDateTime.now());
         }
 
         orderManager.executeOrders();
@@ -40,6 +42,7 @@ public class Portfolio {
         for (Asset asset : assets) {
             totalValue += asset.getValue();
         }
+        timeSinceLastUpdate = OffsetDateTime.now();
     }
 
     private void applyTransactions() {
