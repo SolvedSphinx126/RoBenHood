@@ -14,6 +14,8 @@ public class TestPortfolio {
         testCase2();
         testCase3();
         testCase4();
+        // So far all test cases have been tested with extreme and random values
+        // and are all working as intended.
     }
 
     public static void testCase4() throws InterruptedException {
