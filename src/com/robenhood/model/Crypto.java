@@ -1,5 +1,7 @@
 package com.robenhood.model;
 
+import com.robenhood.model.orders.Order;
+
 import java.time.OffsetDateTime;
 
 public class Crypto {
@@ -11,8 +13,21 @@ public class Crypto {
         this.symbol = symbol;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof Crypto)) {
+            return false;
+        }
+
+        return symbol.equals(((Crypto) o).getSymbol());
+    }
+
     public double getValue(OffsetDateTime time) {
-        return API.getCryptoValue(time, symbol);
+        return API.getCryptoValue(symbol, time);
     }
 
     public String getName() {

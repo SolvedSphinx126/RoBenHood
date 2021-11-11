@@ -32,6 +32,10 @@ public abstract class Order {
 
     public abstract Transaction executeOrder();
 
+    public Crypto getCrypto() {
+        return crypto;
+    }
+
     public void cancel() {
         expireTime = OffsetDateTime.now();
     }
