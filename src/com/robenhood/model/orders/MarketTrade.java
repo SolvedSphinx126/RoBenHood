@@ -14,10 +14,12 @@ public class MarketTrade extends Order {
         this.amount = amount;
         createTime = OffsetDateTime.now();
         this.price = getPrice(createTime);
+        // If the order for some reason takes a day to process then it will expire
+        expireTime = OffsetDateTime.now().plusDays(1);
     }
 
     @Override
     public void makeOrder(HashMap<OffsetDateTime, Double> data) {
-        transaction = new Transaction(createTime, crypto, price, amount, buy);
+        transaction = new Transaction(createTime, crypto, price, amount, buy, createTime.isBefore(expireTime));
     }
 }

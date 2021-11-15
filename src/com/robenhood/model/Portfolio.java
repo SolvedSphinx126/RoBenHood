@@ -6,6 +6,8 @@ import java.util.ArrayList;
 public class Portfolio {
     private ArrayList<Asset> assets;
     private ArrayList<Transaction> transactions;
+    private ArrayList<Transaction> completedTransactions;
+    private ArrayList<Transaction> expiredTransactions;
     private String name;
     private double balance, totalValue;
     private OrderManager orderManager;
@@ -15,6 +17,8 @@ public class Portfolio {
         this.name = name;
         assets = new ArrayList<>();
         transactions = new ArrayList<>();
+        completedTransactions = new ArrayList<>();
+        expiredTransactions = new ArrayList<>();
         balance = 0;
         totalValue = 0;
         orderManager = new OrderManager();
@@ -50,6 +54,17 @@ public class Portfolio {
         orderManager.executeOrders();
         transactions = orderManager.getTransactions();
 
+        // Extract expired transactions
+        for (Transaction trans : transactions) {
+            if (trans.getExpired()) {
+                expiredTransactions.add(trans);
+            }
+        }
+        // Remove expired transactions
+        for (Transaction trans : expiredTransactions) {
+            transactions.remove(trans);
+        }
+
         applyTransactions();
 
         totalValue = 0;
@@ -61,7 +76,8 @@ public class Portfolio {
 
     private void applyTransactions() {
         Asset currAsset = null;
-        ArrayList<Transaction> executed = new ArrayList<>();
+        // Will never not find the asset because if the list was lacking one
+        // then it was added at the beginning of the update method.
         for (Transaction trans : transactions) {
             for (Asset asset : assets) {
                 if ((asset.getCrypto().equals(trans.getCrypto()))) {
@@ -78,9 +94,9 @@ public class Portfolio {
 
             // If the order did not execute because of insufficient balance it will still
             // be removed.
-            executed.add(trans);
+            completedTransactions.add(trans);
         }
-        for (Transaction trans : executed) {
+        for (Transaction trans : completedTransactions) {
             transactions.remove(trans);
         }
     }
