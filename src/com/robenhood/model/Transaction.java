@@ -11,14 +11,16 @@ public class Transaction {
     private double amount;
     private boolean buy;
     private boolean expired;
+    private String type;
 
-    public Transaction(OffsetDateTime time, Crypto crypto, double price, double amount, boolean buy, boolean expired) {
+    public Transaction(OffsetDateTime time, Crypto crypto, double price, double amount, boolean buy, boolean expired, String type) {
         this.time = time;
         this.crypto = crypto;
         this.price = price;
         this.amount = amount;
         this.buy = buy;
         this.expired = expired;
+        this.type = type;
     }
 
     @Override
@@ -60,5 +62,19 @@ public class Transaction {
 
     public double getAmount() {
         return amount;
+    }
+
+    // For debugging purposes mostly
+    @Override
+    public String toString() {
+        String str = "";
+        str += "Type: " + type;
+        str += ", Time: " + time;
+        str += ", Crypto: " + crypto.getName();
+        str += ", Price: " + price;
+        str += ", Amount: " + amount;
+        str += ", Buy: " + buy;
+        str += ", Expired: " + expired;
+        return str;
     }
 }

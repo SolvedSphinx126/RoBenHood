@@ -35,4 +35,15 @@ public class Asset {
     public double getAverageValue() {
         return totalCost / amount;
     }
+
+    // For debugging mostly
+    @Override
+    public String toString() {
+        String str = "";
+        str += "Crypto: " + coin.getName();
+        str += ", Amount: " + amount;
+        str += ", Total Cost: " + totalCost;
+        str += ", Average Value (totalMoneySpent / totalAmountOfCoin): " + getAverageValue();
+        return str;
+    }
 }

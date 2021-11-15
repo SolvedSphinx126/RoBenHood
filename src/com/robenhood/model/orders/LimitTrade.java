@@ -22,9 +22,9 @@ public class LimitTrade extends Order {
     public void makeOrder(HashMap<OffsetDateTime, Double> data) {
         for (Map.Entry<OffsetDateTime, Double> entry : data.entrySet()) {
             if (buy && entry.getValue() <= price) {
-                transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, true, !entry.getKey().isBefore(expireTime));
+                transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, true, !entry.getKey().isBefore(expireTime), type);
             } else if (!buy && entry.getValue() >= price) {
-                transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, false, !entry.getKey().isBefore(expireTime));
+                transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, false, !entry.getKey().isBefore(expireTime), type);
             }
         }
     }
