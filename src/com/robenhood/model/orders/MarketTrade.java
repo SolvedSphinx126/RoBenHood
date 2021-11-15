@@ -20,6 +20,6 @@ public class MarketTrade extends Order {
 
     @Override
     public void makeOrder(HashMap<OffsetDateTime, Double> data) {
-        transaction = new Transaction(createTime, crypto, price, amount, buy, createTime.isBefore(expireTime));
+        transaction = new Transaction(createTime, crypto, price, amount, buy, !createTime.isBefore(expireTime));
     }
 }
