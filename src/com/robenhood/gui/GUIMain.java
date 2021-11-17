@@ -1,6 +1,8 @@
 package com.robenhood.gui;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.event.*;
 
 public class GUIMain extends JDialog {
@@ -8,13 +10,28 @@ public class GUIMain extends JDialog {
     private JButton buttonQuit;
     private JTabbedPane tabbedPane1;
     private JTextField tickerTextField;
+    private JList profileList;
+    private JScrollPane scroll;
+    private JPanel labelPanel;
+    private JLabel profileLabel;
+    private JButton updateList;
 
     public GUIMain() {
         setTitle("RoBen Hood");
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonQuit);
+        String [] ListData = {"Profile 1", "Profile 2", "Profile 3"};
+        listUpdate(ListData);
+        profileLabel.setText(ListData[0]);
 
+        profileList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                String selection = profileList.getSelectedValue().toString();
+                profileLabel.setText(selection);
+            }
+        });
 
         buttonQuit.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -38,6 +55,9 @@ public class GUIMain extends JDialog {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
+    private void listUpdate(String [] ListData){
+        profileList.setListData(ListData);
+    }
     private void onQuit() {
         // add your code here if necessary
         dispose();
