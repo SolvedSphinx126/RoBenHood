@@ -14,7 +14,10 @@ public class TestPortfolio {
         testCase2();
         testCase3();
         testCase4();
+
+        System.out.println(model.getCurrentPortfolioString());
         // So far all test cases have been tested with extreme and random values
+        // and are all working as intended.
         // and are all working as intended.
     }
 
@@ -22,7 +25,7 @@ public class TestPortfolio {
         // Attempts to make a limit sell. Change price and amount to check methods.
         System.out.println("\nTEST CASE 4\n");
         System.out.println("Current balance: " + model.getCurrentPortfolioBalance());
-        System.out.println("Current value: " + model.getCurrentPortfolioValue());
+        System.out.println("Current value: " + model.getCurrentPortfolioTotalValue());
 
         Thread.sleep(2000);
 
@@ -30,20 +33,20 @@ public class TestPortfolio {
         System.out.println("Now updating model");
         model.update();
         System.out.println("Current balance: " + model.getCurrentPortfolioBalance());
-        System.out.println("Current value: " + model.getCurrentPortfolioValue());
+        System.out.println("Current value: " + model.getCurrentPortfolioTotalValue());
     }
 
     public static void testCase3() {
         // Attempts to sell a certain amount of stock. Use this to check if able to sell more than have.
         System.out.println("\nTEST CASE 3\n");
         System.out.println("Current balance: " + model.getCurrentPortfolioBalance());
-        System.out.println("Current value: " + model.getCurrentPortfolioValue());
+        System.out.println("Current value: " + model.getCurrentPortfolioTotalValue());
 
         model.addOrder("Market Trade", new Crypto("Doge Coin", "DOGE"), false, 0, null, 3);
         System.out.println("Now updating model");
         model.update();
         System.out.println("Current balance: " + model.getCurrentPortfolioBalance());
-        System.out.println("Current value: " + model.getCurrentPortfolioValue());
+        System.out.println("Current value: " + model.getCurrentPortfolioTotalValue());
     }
 
     public static void testCase2() {
@@ -55,11 +58,11 @@ public class TestPortfolio {
         model.addOrder("Market Trade", new Crypto("Doge Coin", "DOGE"), true, 0, null, 3);
 
         System.out.println("Current balance: " + model.getCurrentPortfolioBalance());
-        System.out.println("Current value: " + model.getCurrentPortfolioValue());
+        System.out.println("Current value: " + model.getCurrentPortfolioTotalValue());
         System.out.println("Now updating model");
         model.update();
         System.out.println("Current balance: " + model.getCurrentPortfolioBalance());
-        System.out.println("Current value: " + model.getCurrentPortfolioValue());
+        System.out.println("Current value: " + model.getCurrentPortfolioTotalValue());
 
     }
 
@@ -71,28 +74,28 @@ public class TestPortfolio {
         model.addOrder("Market Trade", new Crypto("Doge Coin", "DOGE"), true, 0, null, 10);
 
         System.out.println("Current balance: " + model.getCurrentPortfolioBalance());
-        System.out.println("Current value: " + model.getCurrentPortfolioValue());
+        System.out.println("Current value: " + model.getCurrentPortfolioTotalValue());
         System.out.println("Now updating model");
         model.update();
         System.out.println("Current balance: " + model.getCurrentPortfolioBalance());
-        System.out.println("Current value: " + model.getCurrentPortfolioValue());
+        System.out.println("Current value: " + model.getCurrentPortfolioTotalValue());
 
         System.out.println("Added limit trade");
         model.addOrder("Limit Trade", new Crypto("Doge Coin", "DOGE"), true, 2, OffsetDateTime.now().plusDays(1), 10);
         System.out.println("Current balance: " + model.getCurrentPortfolioBalance());
-        System.out.println("Current value: " + model.getCurrentPortfolioValue());
+        System.out.println("Current value: " + model.getCurrentPortfolioTotalValue());
         System.out.println("Now updating model");
         model.update();
         System.out.println("Current balance: " + model.getCurrentPortfolioBalance());
-        System.out.println("Current value: " + model.getCurrentPortfolioValue());
+        System.out.println("Current value: " + model.getCurrentPortfolioTotalValue());
 
         Thread.sleep(2000);
 
         System.out.println("Current balance: " + model.getCurrentPortfolioBalance());
-        System.out.println("Current value: " + model.getCurrentPortfolioValue());
+        System.out.println("Current value: " + model.getCurrentPortfolioTotalValue());
         System.out.println("Now updating model");
         model.update();
         System.out.println("Current balance: " + model.getCurrentPortfolioBalance());
-        System.out.println("Current value: " + model.getCurrentPortfolioValue());
+        System.out.println("Current value: " + model.getCurrentPortfolioTotalValue());
     }
 }

@@ -24,7 +24,6 @@ public class Model {
 
     public void setCurrentPortfolio(Portfolio p) {
         currentPortfolio = p;
-        currentPortfolio.logIn();
     }
 
     public void createPortfolio(String name) {
@@ -40,7 +39,6 @@ public class Model {
     }
 
    public void switchCurrentPortfolio(String name) {
-        currentPortfolio.logOut();
         setCurrentPortfolio(name);
    }
 
@@ -49,8 +47,8 @@ public class Model {
         currentPortfolio.logIn();
     }*/
 
-    public double getCurrentPortfolioValue() {
-        return currentPortfolio.getPortfolioValue();
+    public double getCurrentPortfolioTotalValue() {
+        return currentPortfolio.getTotalValue();
     }
 
     public double getCurrentPortfolioBalance() {
@@ -59,5 +57,17 @@ public class Model {
 
     public void incrementCurrentPortfolioBalance(double value) {
         currentPortfolio.incrementBalance(value);
+    }
+
+    public void setCurrentPortfolioName(String name) {
+        currentPortfolio.setName(name);
+    }
+
+    public String GetCurrentPortfolioName() {
+        return currentPortfolio.getName();
+    }
+
+    public String getCurrentPortfolioString() {
+        return currentPortfolio.toString();
     }
 }

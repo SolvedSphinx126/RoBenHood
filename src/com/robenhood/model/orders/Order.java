@@ -27,7 +27,7 @@ public abstract class Order {
             return false;
         }
 
-        return createTime == ((Order) o).createTime;
+        return createTime.equals(((Order) o).createTime);
     }
 
     public Transaction executeOrder() {
