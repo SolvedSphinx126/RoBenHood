@@ -11,9 +11,11 @@ public class GUIMain extends JDialog {
     private JTabbedPane tabbedPane1;
     private JTextField tickerTextField;
     private JList profileList;
-    private JScrollPane scroll;
     private JPanel labelPanel;
     private JLabel profileLabel;
+    private JLabel currentTicker;
+    private JButton changeTicker;
+    private JList tradesList;
     private JButton updateList;
 
     public GUIMain() {
@@ -53,6 +55,12 @@ public class GUIMain extends JDialog {
                 onQuit();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        changeTicker.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tickChange();
+            }
+        });
     }
 
     private void listUpdate(String [] ListData){
@@ -61,6 +69,9 @@ public class GUIMain extends JDialog {
     private void onQuit() {
         // add your code here if necessary
         dispose();
+    }
+    private void tickChange(){
+        currentTicker.setText(tickerTextField.getText());
     }
 
     public static void main(String[] args) {
