@@ -137,7 +137,7 @@ public class JSON extends HashMap<String, Object> {
 
                 ret.put(key, list);
 
-            } else if (s.contains(":")){  // Handles primitives/strings
+            } else if (s.contains(":")) {  // Handles primitives/strings
 
                 String key = s.substring(0, s.indexOf(":"));
 
