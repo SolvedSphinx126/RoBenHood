@@ -1,16 +1,22 @@
 package com.robenhood.model;
 
-import com.robenhood.model.orders.Order;
+import com.robenhood.data.JSON;
+import com.robenhood.data.JSONObject;
 
 import java.time.OffsetDateTime;
 
-public class Crypto {
+public class Crypto implements JSONObject {
     private String name;
     private String symbol;
 
     public Crypto(String name, String symbol) {
         this.name = name;
         this.symbol = symbol;
+    }
+
+    public Crypto(JSON json) {
+        name = (String) json.get("name");
+        symbol = (String) json.get("symbol");
     }
 
     @Override
@@ -44,5 +50,15 @@ public class Crypto {
 
     public void setSymbol(String symbol) {
         this.symbol = symbol;
+    }
+
+    @Override
+    public JSON toJSON() {
+        JSON json = new JSON();
+
+        json.put("name", name);
+        json.put("symbol", symbol);
+
+        return json;
     }
 }

@@ -179,7 +179,5 @@ public class JSONMain {
 
         System.out.println(new JSON(json2));
 
-        System.out.println(realJSON.get("banned"));
-
     }
 }

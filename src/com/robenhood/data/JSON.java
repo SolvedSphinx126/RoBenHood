@@ -29,42 +29,10 @@ public class JSON extends HashMap<String, Object> {
         int count = 0;  // This count is purely to check if it's the last, and avoiding placing a comma at the end
         for (String key: this.keySet()) {
 
-            Object obj = this.get(key);
-            StringBuilder value = new StringBuilder();
+            String value = recursiveToString(this.get(key));
 
-            if (obj instanceof String) {
-                value.append("\"").append(obj).append("\"");
-            } else if (obj instanceof List) {  // Handling ArrayLists and stuff in a custom manner
-
-                value.append("[\n");
-                List<Object> list = (List) obj;
-
-                for (int i = 0; i < list.size(); i++) {
-                    Object subObj = list.get(i);
-                    value.append("    ");
-
-                    if (subObj instanceof JSONObject) {
-                        value.append(((JSONObject) subObj).toJSON().toString());
-                    } else if (subObj instanceof String) {
-                        value.append("\"").append(obj).append("\"");
-                    } else {
-                        value.append(subObj.toString());
-                    }
-
-                    if (i < list.size() - 1)  // Avoid putting a comma after the last element
-                        value.append(",");
-                    value.append("\n");
-                }
-
-                value.append("]");
-
-            } else if (obj instanceof JSONObject) {
-                value.append(((JSONObject) obj).toJSON().toString());
-            } else {
-                value = new StringBuilder(obj.toString());
-            }
             // This looks like 10x worse as a StringBuilder thing, but the IntelliJ highlighting annoys me so much
-            ret.append("    \"").append(key).append("\": ").append(value.toString().replace("\n", "\n    "));
+            ret.append("    \"").append(key).append("\": ").append(value.replace("\n", "\n    "));
 
             if (count < this.size() - 1)  // Avoid placing comma on last value
                 ret.append(",");
@@ -77,14 +45,36 @@ public class JSON extends HashMap<String, Object> {
 
     }
 
+    private static String recursiveToString(Object obj) {
+        String value = "";
+        if (obj instanceof JSON) {
+            value = value + obj;
+        } else if (obj instanceof List) {
+            value = value + "[\n";
+            List<Object> list = (List<Object>) obj;
+            for (int lcv = 0; lcv < list.size(); lcv++) {
+                value = value + "    " + recursiveToString(list.get(lcv)).replace("\n", "\n    ");
+
+                if (lcv < list.size() - 1)
+                    value = value + ",";
+
+                value = value + "\n";
+            }
+            value = value + "]";
+        } else if (obj instanceof JSONObject) {
+            value = value + ((JSONObject) obj).toJSON();
+        } else if (obj instanceof String) {
+            value = value + "\"" + obj + "\"";
+        } else {
+            value = value + obj;
+        }
+        return value;
+    }
+
     private static JSON readJSON(String json) {
         json = json.trim();
 
         JSON ret;  // This is the JSON object that will be filled and returned.
-        if (json.startsWith("{") && json.endsWith("}")) {
-            ret = readJSON(json.substring(1, json.length() - 1));
-            return ret;
-        }
 
         // Detection and replacement of commas in strings.
         Matcher matcher = Pattern.compile("\".*?\"").matcher(json);  // This detects all strings
@@ -135,61 +125,72 @@ public class JSON extends HashMap<String, Object> {
 
         int count = 0;
         for (String s: elements) {
+            int firstBracket = s.indexOf("{");
 
-            if (s.contains("{")) {  // Recusively handles dicts
+            if (s.contains(":") && (firstBracket == -1 || s.indexOf(":") < firstBracket)) {
 
-                String key = s.substring(0, s.indexOf(":"));
+                String key = s.substring(0, s.indexOf(":")).trim(), value = s.substring(s.indexOf(":") + 1).trim();
 
                 if (key.startsWith("\"") && key.endsWith("\""))
-                    key = key.substring(1, key.length() - 1);
+                        key = key.substring(1, key.length() - 1);
 
-                JSON value = readJSON(s.substring(s.indexOf("{") + 1, s.lastIndexOf("}")));
+                if (value.startsWith("{")) {  // Recusively handles dicts
 
-                ret.put(key, value);
+                    ret.put(key, readJSON(value.substring(1, value.length() - 1)));
 
-            } else if (s.contains("[")) {  // Recursively handle lists
+                } else if (value.startsWith("[")) {  // Recursively handle lists
 
-                // Pull out the key string
-                String key = s.substring(0, s.indexOf(":"));
-                if (key.startsWith("\"") && key.endsWith("\""))
-                    key = key.substring(1, key.length() - 1);
+                    JSON listJSON = readJSON(value.substring(1, value.length() - 1));  // normally 1, -1
+                    // This converts JSON lists to an ArrayList
+                    ArrayList<Object> list = new ArrayList<>();
+                    for (String subKey: listJSON.keySet()) {
+                        list.add(listJSON.get(subKey));
+                    }
 
-                JSON value = readJSON(s.substring(s.indexOf("[") + 1, s.lastIndexOf("]")));
+                    ret.put(key, list);
 
-                // This converts JSON lists to an ArrayList
-                ArrayList<Object> list = new ArrayList<>();
-                for (String subKey: value.keySet()) {
-                    list.add(value.get(subKey));
+                } else {  // Handles primitives/strings
+
+                    if (value.startsWith("\"") && value.endsWith("\""))
+                        value = value.substring(1, value.length() - 1);
+
+                    ret.put(key, convert(value));
+
+                }
+            } else if (!"".equals(s)){
+
+
+                Object value;
+
+                if (s.startsWith("{")) {  // Recusively handles dicts
+
+                    value = readJSON(s.substring(1, s.length() - 1));
+
+                } else if (s.startsWith("[")) {  // Recursively handle lists
+
+                    JSON listJSON = readJSON(s.substring(1, s.length() - 1));  // normally 1, -1
+                    // This converts JSON lists to an ArrayList
+                    ArrayList<Object> list = new ArrayList<>();
+                    for (String subKey: listJSON.keySet()) {
+                        list.add(listJSON.get(subKey));
+                    }
+
+                    value = listJSON;
+
+                } else {  // Handles primitives/strings
+
+                    if (s.startsWith("\"") && s.endsWith("\""))
+                        s = s.substring(1, s.length() - 1);
+
+                    value = convert(s);
+
                 }
 
-                ret.put(key, list);
-
-            } else if (s.contains(":")) {  // Handles primitives/strings
-
-                String key = s.substring(0, s.indexOf(":"));
-
-                if (key.startsWith("\"") && key.endsWith("\""))
-                    key = key.substring(1, key.length() - 1);
-
-                String value = s.substring(s.indexOf(":") + 1).trim();
-
-                if (value.startsWith("\"") && value.endsWith("\""))
-                    value = value.substring(1, value.length() - 1);
-
-                ret.put(key, convert(value));
-
-            } else {
-
-                if (s.startsWith("\"") && s.endsWith("\""))
-                    s = s.substring(1, s.length() - 2);
-
-                ret.put("" + count, convert(s));
+                ret.put("" + count, value);
 
                 count++;
-
             }
         }
-
         return ret;
     }
 
@@ -197,7 +198,13 @@ public class JSON extends HashMap<String, Object> {
         StringBuilder ret = new StringBuilder();
         for (String s: json.split("\n"))
             ret.append(s.trim());
-        return ret.toString();
+
+        json = ret.toString();
+
+        if (json.startsWith("{") && json.endsWith("}"))
+            json = json.substring(1, json.length() - 1);
+
+        return json;
     }
 
     private static boolean isBoolean(String s) {
@@ -234,7 +241,7 @@ public class JSON extends HashMap<String, Object> {
     private static Object convert(String s) {
         // This converts the string to the correct data type
         if (isBoolean(s)) {
-            return Boolean.getBoolean(s);
+            return "true".equals(s);
         } else if (isInteger(s)) {
             return Integer.parseInt(s);
         } else if (isDouble(s) && !isBigInteger(s)) {

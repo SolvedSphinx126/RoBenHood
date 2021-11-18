@@ -1,9 +1,13 @@
 package com.robenhood.model;
 
+import com.robenhood.data.JSON;
+import com.robenhood.data.JSONObject;
+
+import java.lang.reflect.Array;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
-public class Portfolio {
+public class Portfolio implements JSONObject {
     private ArrayList<Asset> assets;
     private ArrayList<Transaction> transactions;
     private ArrayList<Transaction> completedTransactions;
@@ -28,14 +32,28 @@ public class Portfolio {
         timeSinceLastUpdate = OffsetDateTime.now();
     }
 
-    // Only for loading from file. Will need to make clone methods for all the
-    // objects that are set to maintain encapsulation.
-    public Portfolio(String name, ArrayList<Asset> assets, double balance, OrderManager OM, OffsetDateTime timeSinceLastUpdate) {
-        this.name = name;
-        this.assets = assets;
-        this.balance = balance;
-        orderManager = OM;
-        this.timeSinceLastUpdate = timeSinceLastUpdate;
+    // For creating a portfolio from save data
+    public Portfolio(JSON json) {
+        name = json.get("name").toString();
+        balance = (double) json.get("balance");
+        totalValue = (double) json.get("totalValue");
+        timeSinceLastUpdate =  OffsetDateTime.parse((String) json.get("timeSinceLastUpdate"));
+        orderManager = new OrderManager((JSON) json.get("orderManager"));
+
+        assets = new ArrayList<>();
+        transactions = new ArrayList<>();
+        completedTransactions = new ArrayList<>();
+        expiredTransactions = new ArrayList<>();
+
+        for (JSON subJSON : (ArrayList<JSON>) json.get("assets")) {
+            assets.add(new Asset(subJSON));
+        }
+        for (JSON subJSON : (ArrayList<JSON>) json.get("completedTransactions")) {
+            completedTransactions.add(new Transaction(subJSON));
+        }
+        for (JSON subJSON : (ArrayList<JSON>) json.get("expiredTransactions")) {
+            expiredTransactions.add(new Transaction(subJSON));
+        }
     }
 
     public void update() {
@@ -103,6 +121,7 @@ public class Portfolio {
         for (Transaction trans : completedTransactions) {
             transactions.remove(trans);
         }
+        // Transactions should always be empty after the update function. They were either executed or outdated.
     }
 
     public void addOrder(String type, Crypto crypto, boolean buy, double price, OffsetDateTime expireTime, double amount) {
@@ -167,4 +186,20 @@ public class Portfolio {
         return str;
     }
 
+    @Override
+    public JSON toJSON() {
+        JSON json = new JSON();
+
+        json.put("name", name);
+        json.put("balance", balance);
+        json.put("totalValue", totalValue);
+        json.put("timeSinceLastUpdate", timeSinceLastUpdate.toString());
+        json.put("orderManager", orderManager);
+
+        json.put("assets", assets);
+        json.put("completedTransactions", completedTransactions);
+        json.put("expiredTransactions", expiredTransactions);
+
+        return json;
+    }
 }
