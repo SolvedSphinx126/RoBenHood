@@ -1,5 +1,7 @@
 package com.robenhood.model;
 
+import com.robenhood.data.JSON;
+import com.robenhood.data.JSONObject;
 import com.robenhood.model.orders.LimitTrade;
 import com.robenhood.model.orders.MarketTrade;
 import com.robenhood.model.orders.Order;
@@ -7,13 +9,23 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class OrderManager {
+public class OrderManager implements JSONObject {
     private ArrayList<Order> orders;
     private ArrayList<Transaction> transactions;
 
     public OrderManager() {
         orders = new ArrayList<>();
         transactions = new ArrayList<>();
+    }
+
+    public OrderManager(JSON json) {
+        orders = new ArrayList<>();
+        transactions = new ArrayList<>();
+
+        for (JSON subJSON : (ArrayList<JSON>) json.get("orders")) {
+            if (subJSON.get("type").equals("Limit Trade"))
+                orders.add(new Order(subJSON));
+        }
     }
 
     public void addOrder(String type, Crypto crypto, boolean buy, double price, OffsetDateTime expireTime, double amount) {
@@ -67,5 +79,15 @@ public class OrderManager {
 
     public ArrayList<Transaction> getTransactions() {
         return transactions;
+    }
+
+    @Override
+    public JSON toJSON() {
+        JSON json = new JSON();
+
+        json.put("orders", orders);
+        json.put("transactions", transactions);
+
+        return json;
     }
 }

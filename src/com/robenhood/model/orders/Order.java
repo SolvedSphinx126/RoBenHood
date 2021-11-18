@@ -1,11 +1,13 @@
 package com.robenhood.model.orders;
 
+import com.robenhood.data.JSON;
+import com.robenhood.data.JSONObject;
 import com.robenhood.model.Crypto;
 import com.robenhood.model.Transaction;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 
-public abstract class Order {
+public abstract class Order implements JSONObject {
     protected boolean buy;
     protected double price;
     protected OffsetDateTime createTime;
@@ -56,5 +58,21 @@ public abstract class Order {
 
     public double getPrice(OffsetDateTime time) {
         return crypto.getValue(time);
+    }
+
+    @Override
+    public JSON toJSON(){
+        JSON json = new JSON();
+
+        json.put("buy", buy);
+        json.put("price", price);
+        json.put("createTime", createTime);
+        json.put("expireTime", expireTime);
+        json.put("crypto", crypto);
+        json.put("transaction", transaction);
+        json.put("type", type);
+        json.put("amount", amount);
+
+        return json;
     }
 }
