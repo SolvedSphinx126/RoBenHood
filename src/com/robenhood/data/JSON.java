@@ -79,12 +79,9 @@ public class JSON extends HashMap<String, Object> {
 
     private static JSON readJSON(String json) {
         json = json.trim();
+        System.out.println("Reading " + json);
 
         JSON ret;  // This is the JSON object that will be filled and returned.
-//        if (json.startsWith("{") && json.endsWith("}")) {
-//            ret = readJSON(json.substring(1, json.length() - 1));
-//            return ret;
-//        }
 
         // Detection and replacement of commas in strings.
         Matcher matcher = Pattern.compile("\".*?\"").matcher(json);  // This detects all strings
@@ -135,24 +132,21 @@ public class JSON extends HashMap<String, Object> {
 
         int count = 0;
         for (String s: elements) {
-            System.out.println("poop:" + s);
             int firstBracket = s.indexOf("{");
 
             if (s.contains(":") && (firstBracket == -1 || s.indexOf(":") < firstBracket)) {
-                String key = s.substring(0, s.indexOf(":")).trim(), value = s.substring(s.indexOf(":") + 1).trim();
 
-                System.out.println("pee: " + key + " -=- " + value);
+                String key = s.substring(0, s.indexOf(":")).trim(), value = s.substring(s.indexOf(":") + 1).trim();
 
                 if (key.startsWith("\"") && key.endsWith("\""))
                         key = key.substring(1, key.length() - 1);
 
                 if (value.startsWith("{")) {  // Recusively handles dicts
 
-                    ret.put(key, readJSON(value));
+                    ret.put(key, readJSON(value.substring(1, value.length() - 1)));
 
                 } else if (value.startsWith("[")) {  // Recursively handle lists
 
-                    System.out.println("????");
                     JSON listJSON = readJSON(value.substring(1, value.length() - 1));  // normally 1, -1
                     // This converts JSON lists to an ArrayList
                     ArrayList<Object> list = new ArrayList<>();
@@ -170,18 +164,40 @@ public class JSON extends HashMap<String, Object> {
                     ret.put(key, convert(value));
 
                 }
-            } else {
+            } else if (!"".equals(s)){
 
-                if (s.startsWith("\"") && s.endsWith("\""))
-                    s = s.substring(1, s.length() - 1);
 
-                ret.put("" + count, convert(s));
+                Object value;
+
+                if (s.startsWith("{")) {  // Recusively handles dicts
+
+                    value = readJSON(s.substring(1, s.length() - 1));
+
+                } else if (s.startsWith("[")) {  // Recursively handle lists
+
+                    JSON listJSON = readJSON(s.substring(1, s.length() - 1));  // normally 1, -1
+                    // This converts JSON lists to an ArrayList
+                    ArrayList<Object> list = new ArrayList<>();
+                    for (String subKey: listJSON.keySet()) {
+                        list.add(listJSON.get(subKey));
+                    }
+
+                    value = listJSON;
+
+                } else {  // Handles primitives/strings
+
+                    if (s.startsWith("\"") && s.endsWith("\""))
+                        s = s.substring(1, s.length() - 1);
+
+                    value = convert(s);
+
+                }
+
+                ret.put("" + count, value);
 
                 count++;
-
             }
         }
-
         return ret;
     }
 
