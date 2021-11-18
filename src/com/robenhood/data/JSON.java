@@ -73,7 +73,6 @@ public class JSON extends HashMap<String, Object> {
 
     private static JSON readJSON(String json) {
         json = json.trim();
-        System.out.println("Reading " + json);
 
         JSON ret;  // This is the JSON object that will be filled and returned.
 
