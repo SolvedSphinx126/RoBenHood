@@ -29,42 +29,10 @@ public class JSON extends HashMap<String, Object> {
         int count = 0;  // This count is purely to check if it's the last, and avoiding placing a comma at the end
         for (String key: this.keySet()) {
 
-            Object obj = this.get(key);
-            StringBuilder value = new StringBuilder();
+            String value = recursiveToString(this.get(key));
 
-            if (obj instanceof String) {
-                value.append("\"").append(obj).append("\"");
-            } else if (obj instanceof List) {  // Handling ArrayLists and stuff in a custom manner
-
-                value.append("[\n");
-                List<Object> list = (List) obj;
-
-                for (int i = 0; i < list.size(); i++) {
-                    Object subObj = list.get(i);
-                    value.append("    ");
-
-                    if (subObj instanceof JSONObject) {
-                        value.append(((JSONObject) subObj).toJSON().toString());
-                    } else if (subObj instanceof String) {
-                        value.append("\"").append(obj).append("\"");
-                    } else {
-                        value.append(subObj.toString());
-                    }
-
-                    if (i < list.size() - 1)  // Avoid putting a comma after the last element
-                        value.append(",");
-                    value.append("\n");
-                }
-
-                value.append("]");
-
-            } else if (obj instanceof JSONObject) {
-                value.append(((JSONObject) obj).toJSON().toString());
-            } else {
-                value = new StringBuilder(obj.toString());
-            }
             // This looks like 10x worse as a StringBuilder thing, but the IntelliJ highlighting annoys me so much
-            ret.append("    \"").append(key).append("\": ").append(value.toString().replace("\n", "\n    "));
+            ret.append("    \"").append(key).append("\": ").append(value.replace("\n", "\n    "));
 
             if (count < this.size() - 1)  // Avoid placing comma on last value
                 ret.append(",");
@@ -75,6 +43,32 @@ public class JSON extends HashMap<String, Object> {
 
         return ret + "}";
 
+    }
+
+    private static String recursiveToString(Object obj) {
+        String value = "";
+        if (obj instanceof JSON) {
+            value = value + obj;
+        } else if (obj instanceof List) {
+            value = value + "[\n";
+            List<Object> list = (List<Object>) obj;
+            for (int lcv = 0; lcv < list.size(); lcv++) {
+                value = value + "    " + recursiveToString(list.get(lcv)).replace("\n", "\n    ");
+
+                if (lcv < list.size() - 1)
+                    value = value + ",";
+
+                value = value + "\n";
+            }
+            value = value + "]";
+        } else if (obj instanceof JSONObject) {
+            value = value + ((JSONObject) obj).toJSON();
+        } else if (obj instanceof String) {
+            value = value + "\"" + obj + "\"";
+        } else {
+            value = value + obj;
+        }
+        return value;
     }
 
     private static JSON readJSON(String json) {
@@ -248,7 +242,7 @@ public class JSON extends HashMap<String, Object> {
     private static Object convert(String s) {
         // This converts the string to the correct data type
         if (isBoolean(s)) {
-            return Boolean.getBoolean(s);
+            return "true".equals(s);
         } else if (isInteger(s)) {
             return Integer.parseInt(s);
         } else if (isDouble(s) && !isBigInteger(s)) {
