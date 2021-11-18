@@ -22,14 +22,12 @@ public class OrderManager implements JSONObject {
         orders = new ArrayList<>();
         transactions = new ArrayList<>();
 
-        System.out.println(json.get("orders").getClass());
-        System.out.println(((ArrayList<String>) json.get("orders")).get(0).getClass() + ((ArrayList) json.get("orders")).get(0).toString());
         for (JSON subJSON : (ArrayList<JSON>) json.get("orders")) {
-            /*if (subJSON.get("type").equals("Limit Trade")) {
+            if (subJSON.get("type").equals("Limit Trade")) {
                 orders.add(new LimitTrade(subJSON));
             } else if (subJSON.get("type").equals("Market Trade")) {
                 orders.add(new MarketTrade(subJSON));
-            }*/
+            }
         }
         for (JSON subJSON : (ArrayList<JSON>) json.get("transactions")) {
             transactions.add(new Transaction(subJSON));

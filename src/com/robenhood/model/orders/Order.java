@@ -72,7 +72,6 @@ public abstract class Order implements JSONObject {
         json.put("transaction", transaction);
         json.put("type", type);
         json.put("amount", amount);
-        System.out.println("\n\n\n\n\n\n\n\n\n");
         return json;
     }
 }
