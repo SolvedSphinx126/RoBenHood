@@ -38,14 +38,14 @@ public class TestPortfolio {
                 "        }\n" +
                 "    ],\n" +
                 "    \"balance\": 10.0,\n" +
-                "    \"timeSinceLastUpdate\": \"2021-11-17T21:25:22.618365800-06:00\",\n" +
+                "    \"timeSinceLastUpdate\": \"2021-11-17T23:27:10.501377400-06:00\",\n" +
                 "    \"completedTransactions\": [\n" +
                 "        {\n" +
                 "            \"amount\": 10.0,\n" +
                 "            \"expired\": false,\n" +
                 "            \"price\": 0.261,\n" +
                 "            \"buy\": true,\n" +
-                "            \"time\": \"2021-11-17T21:25:18.563730700-06:00\",\n" +
+                "            \"time\": \"2021-11-17T23:27:06.447153400-06:00\",\n" +
                 "            \"type\": \"Market Trade\",\n" +
                 "            \"crypto\": {\n" +
                 "                \"symbol\": \"DOGE\",\n" +
@@ -57,7 +57,7 @@ public class TestPortfolio {
                 "            \"expired\": false,\n" +
                 "            \"price\": 1.0,\n" +
                 "            \"buy\": true,\n" +
-                "            \"time\": \"2021-11-17T21:25:18.595759500-06:00\",\n" +
+                "            \"time\": \"2021-11-17T23:27:06.474801200-06:00\",\n" +
                 "            \"type\": \"Limit Trade\",\n" +
                 "            \"crypto\": {\n" +
                 "                \"symbol\": \"DOGE\",\n" +
@@ -69,7 +69,7 @@ public class TestPortfolio {
                 "            \"expired\": false,\n" +
                 "            \"price\": 0.261,\n" +
                 "            \"buy\": true,\n" +
-                "            \"time\": \"2021-11-17T21:25:20.610357400-06:00\",\n" +
+                "            \"time\": \"2021-11-17T23:27:08.485580900-06:00\",\n" +
                 "            \"type\": \"Market Trade\",\n" +
                 "            \"crypto\": {\n" +
                 "                \"symbol\": \"DOGE\",\n" +
@@ -81,7 +81,7 @@ public class TestPortfolio {
                 "            \"expired\": false,\n" +
                 "            \"price\": 0.261,\n" +
                 "            \"buy\": false,\n" +
-                "            \"time\": \"2021-11-17T21:25:20.611358400-06:00\",\n" +
+                "            \"time\": \"2021-11-17T23:27:08.485580900-06:00\",\n" +
                 "            \"type\": \"Market Trade\",\n" +
                 "            \"crypto\": {\n" +
                 "                \"symbol\": \"DOGE\",\n" +
@@ -93,7 +93,7 @@ public class TestPortfolio {
                 "            \"expired\": false,\n" +
                 "            \"price\": 3.0,\n" +
                 "            \"buy\": false,\n" +
-                "            \"time\": \"2021-11-17T21:25:22.611358400-06:00\",\n" +
+                "            \"time\": \"2021-11-17T23:27:10.486581900-06:00\",\n" +
                 "            \"type\": \"Limit Trade\",\n" +
                 "            \"crypto\": {\n" +
                 "                \"symbol\": \"DOGE\",\n" +
@@ -112,10 +112,97 @@ public class TestPortfolio {
         System.out.println("Assets:\n" + json.get("assets").toString());
         System.out.println("\nTEST CASE JSON\n");
         System.out.println("Printing the current portfolio as json");
-        System.out.println(model.getCurrentPortfolioJSON().toString());
+        System.out.println("\n\n\n\n" + model.getCurrentPortfolioJSON().toString());
         System.out.println("Attempting to construct portfolio data from file");
         model.setCurrentPortfolioJSON(json);
         System.out.println(model.getCurrentPortfolioString());
+        System.out.println(model.getCurrentPortfolioJSON().toString());
+        System.out.println("{\n" +
+                "    \"totalValue\": 4.437,\n" +
+                "    \"expiredTransactions\": [\n" +
+                "    ],\n" +
+                "    \"assets\": [\n" +
+                "        {\n" +
+                "            \"amount\": 17.0,\n" +
+                "            \"totalCost\": 3.6099999999999994,\n" +
+                "            \"coin\": {\n" +
+                "                \"symbol\": \"DOGE\",\n" +
+                "                \"name\": \"Doge Coin\"\n" +
+                "            }\n" +
+                "        }\n" +
+                "    ],\n" +
+                "    \"balance\": 10.0,\n" +
+                "    \"timeSinceLastUpdate\": \"2021-11-17T23:27:10.501377400-06:00\",\n" +
+                "    \"completedTransactions\": [\n" +
+                "        {\n" +
+                "            \"amount\": 10.0,\n" +
+                "            \"expired\": false,\n" +
+                "            \"price\": 0.261,\n" +
+                "            \"buy\": true,\n" +
+                "            \"time\": \"2021-11-17T23:27:06.447153400-06:00\",\n" +
+                "            \"type\": \"Market Trade\",\n" +
+                "            \"crypto\": {\n" +
+                "                \"symbol\": \"DOGE\",\n" +
+                "                \"name\": \"Doge Coin\"\n" +
+                "            }\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"amount\": 10.0,\n" +
+                "            \"expired\": false,\n" +
+                "            \"price\": 1.0,\n" +
+                "            \"buy\": true,\n" +
+                "            \"time\": \"2021-11-17T23:27:06.474801200-06:00\",\n" +
+                "            \"type\": \"Limit Trade\",\n" +
+                "            \"crypto\": {\n" +
+                "                \"symbol\": \"DOGE\",\n" +
+                "                \"name\": \"Doge Coin\"\n" +
+                "            }\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"amount\": 3.0,\n" +
+                "            \"expired\": false,\n" +
+                "            \"price\": 0.261,\n" +
+                "            \"buy\": true,\n" +
+                "            \"time\": \"2021-11-17T23:27:08.485580900-06:00\",\n" +
+                "            \"type\": \"Market Trade\",\n" +
+                "            \"crypto\": {\n" +
+                "                \"symbol\": \"DOGE\",\n" +
+                "                \"name\": \"Doge Coin\"\n" +
+                "            }\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"amount\": 3.0,\n" +
+                "            \"expired\": false,\n" +
+                "            \"price\": 0.261,\n" +
+                "            \"buy\": false,\n" +
+                "            \"time\": \"2021-11-17T23:27:08.485580900-06:00\",\n" +
+                "            \"type\": \"Market Trade\",\n" +
+                "            \"crypto\": {\n" +
+                "                \"symbol\": \"DOGE\",\n" +
+                "                \"name\": \"Doge Coin\"\n" +
+                "            }\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"amount\": 3.0,\n" +
+                "            \"expired\": false,\n" +
+                "            \"price\": 3.0,\n" +
+                "            \"buy\": false,\n" +
+                "            \"time\": \"2021-11-17T23:27:10.486581900-06:00\",\n" +
+                "            \"type\": \"Limit Trade\",\n" +
+                "            \"crypto\": {\n" +
+                "                \"symbol\": \"DOGE\",\n" +
+                "                \"name\": \"Doge Coin\"\n" +
+                "            }\n" +
+                "        }\n" +
+                "    ],\n" +
+                "    \"name\": \"First P\",\n" +
+                "    \"orderManager\": {\n" +
+                "        \"orders\": [\n" +
+                "        ],\n" +
+                "        \"transactions\": [\n" +
+                "        ]\n" +
+                "    }\n" +
+                "}");
     }
 
     public static void testCase4() throws InterruptedException {

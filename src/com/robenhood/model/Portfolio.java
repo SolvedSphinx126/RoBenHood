@@ -38,20 +38,22 @@ public class Portfolio implements JSONObject {
         balance = (double) json.get("balance");
         totalValue = (double) json.get("totalValue");
         timeSinceLastUpdate =  OffsetDateTime.parse((String) json.get("timeSinceLastUpdate"));
-        //orderManager = new OrderManager((JSON) json.get("orderManager"));
+        orderManager = new OrderManager((JSON) json.get("orderManager"));
 
         assets = new ArrayList<>();
         transactions = new ArrayList<>();
         completedTransactions = new ArrayList<>();
         expiredTransactions = new ArrayList<>();
 
-        System.out.println(json.get("assets").getClass() + "\n" + json.get("assets").toString());
-
         for (JSON subJSON : (ArrayList<JSON>) json.get("assets")) {
             assets.add(new Asset(subJSON));
         }
-        completedTransactions.addAll((ArrayList<Transaction>) json.get("completedTransactions"));
-        expiredTransactions.addAll((ArrayList<Transaction>) json.get("expiredTransactions"));
+        for (JSON subJSON : (ArrayList<JSON>) json.get("completedTransactions")) {
+            completedTransactions.add(new Transaction(subJSON));
+        }
+        for (JSON subJSON : (ArrayList<JSON>) json.get("expiredTransactions")) {
+            expiredTransactions.add(new Transaction(subJSON));
+        }
     }
 
     public void update() {
