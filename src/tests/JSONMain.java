@@ -171,12 +171,15 @@ public class JSONMain {
 
         String json2 = "{\"result\":{\"price\":56240.6},\"allowance\":{\"cost\":0.005,\"remaining\":9.995,\"upgrade\":\"For unlimited API access, create an account at https://cryptowat.ch\"}}";
 
-        System.out.println(new JSON(json));
+        JSON realJSON = new JSON(json);
+        System.out.println(realJSON);
         for (int lcv = 0; lcv < 128; lcv++)
             System.out.print("-");
         System.out.println();
 
         System.out.println(new JSON(json2));
+
+        System.out.println(realJSON.get("banned"));
 
     }
 }

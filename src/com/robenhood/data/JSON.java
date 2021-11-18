@@ -8,6 +8,7 @@ package com.robenhood.data;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,17 +30,43 @@ public class JSON extends HashMap<String, Object> {
         for (String key: this.keySet()) {
 
             Object obj = this.get(key);
-            String value;
+            StringBuilder value = new StringBuilder();
 
             if (obj instanceof String) {
-                value = "\"" + obj + "\"";
+                value.append("\"").append(obj).append("\"");
+            } else if (obj instanceof List) {  // Handling ArrayLists and stuff in a custom manner
+
+                value.append("[\n");
+                List<Object> list = (List) obj;
+
+                for (int i = 0; i < list.size(); i++) {
+                    Object subObj = list.get(i);
+                    value.append("    ");
+
+                    if (subObj instanceof JSONObject) {
+                        value.append(((JSONObject) subObj).toJSON().toString());
+                    } else if (subObj instanceof String) {
+                        value.append("\"").append(obj).append("\"");
+                    } else {
+                        value.append(subObj.toString());
+                    }
+
+                    if (i < list.size() - 1)  // Avoid putting a comma after the last element
+                        value.append(",");
+                    value.append("\n");
+                }
+
+                value.append("]");
+
+            } else if (obj instanceof JSONObject) {
+                value.append(((JSONObject) obj).toJSON().toString());
             } else {
-                value = obj.toString();
+                value = new StringBuilder(obj.toString());
             }
             // This looks like 10x worse as a StringBuilder thing, but the IntelliJ highlighting annoys me so much
-            ret.append("    \"").append(key).append("\": ").append(value.replace("\n", "\n    "));
+            ret.append("    \"").append(key).append("\": ").append(value.toString().replace("\n", "\n    "));
 
-            if (count != this.size() - 1)  // Avoid placing comma on last value
+            if (count < this.size() - 1)  // Avoid placing comma on last value
                 ret.append(",");
 
             ret.append("\n");
@@ -173,6 +200,10 @@ public class JSON extends HashMap<String, Object> {
         return ret.toString();
     }
 
+    private static boolean isBoolean(String s) {
+        return ("true".equals(s) || "false".equals(s));
+    }
+
     private static boolean isBigInteger(String string) {
         try {
             new BigInteger(string, 10);
@@ -202,7 +233,9 @@ public class JSON extends HashMap<String, Object> {
 
     private static Object convert(String s) {
         // This converts the string to the correct data type
-        if (isInteger(s)) {
+        if (isBoolean(s)) {
+            return Boolean.getBoolean(s);
+        } else if (isInteger(s)) {
             return Integer.parseInt(s);
         } else if (isDouble(s) && !isBigInteger(s)) {
             return Double.parseDouble(s);
