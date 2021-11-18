@@ -3,6 +3,7 @@ package com.robenhood.model;
 import com.robenhood.data.JSON;
 import com.robenhood.data.JSONObject;
 
+import java.lang.reflect.Array;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
@@ -36,23 +37,21 @@ public class Portfolio implements JSONObject {
         name = json.get("name").toString();
         balance = (double) json.get("balance");
         totalValue = (double) json.get("totalValue");
-        timeSinceLastUpdate = OffsetDateTime.parse((String) json.get("timeSinceLastUpdate"));
-        orderManager = new OrderManager((JSON) json.get("orderManager"));
+        timeSinceLastUpdate =  OffsetDateTime.parse((String) json.get("timeSinceLastUpdate"));
+        //orderManager = new OrderManager((JSON) json.get("orderManager"));
 
         assets = new ArrayList<>();
         transactions = new ArrayList<>();
         completedTransactions = new ArrayList<>();
         expiredTransactions = new ArrayList<>();
 
+        System.out.println(json.get("assets").getClass() + "\n" + json.get("assets").toString());
+
         for (JSON subJSON : (ArrayList<JSON>) json.get("assets")) {
             assets.add(new Asset(subJSON));
         }
-        for (JSON subJSON : (ArrayList<JSON>) json.get("completedTransactions")) {
-            completedTransactions.add(new Transaction(subJSON));
-        }
-        for (JSON subJSON : (ArrayList<JSON>) json.get("expiredTransactions")) {
-            expiredTransactions.add(new Transaction(subJSON));
-        }
+        completedTransactions.addAll((ArrayList<Transaction>) json.get("completedTransactions"));
+        expiredTransactions.addAll((ArrayList<Transaction>) json.get("expiredTransactions"));
     }
 
     public void update() {
@@ -192,7 +191,7 @@ public class Portfolio implements JSONObject {
         json.put("name", name);
         json.put("balance", balance);
         json.put("totalValue", totalValue);
-        json.put("timeSinceLastUpdate", timeSinceLastUpdate);
+        json.put("timeSinceLastUpdate", timeSinceLastUpdate.toString());
         json.put("orderManager", orderManager);
 
         json.put("assets", assets);

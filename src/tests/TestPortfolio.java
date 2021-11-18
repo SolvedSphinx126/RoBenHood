@@ -1,5 +1,6 @@
 package tests;
 
+import com.robenhood.data.JSON;
 import com.robenhood.model.Crypto;
 import com.robenhood.model.Model;
 import com.robenhood.model.Portfolio;
@@ -14,11 +15,107 @@ public class TestPortfolio {
         testCase2();
         testCase3();
         testCase4();
-
         System.out.println(model.getCurrentPortfolioString());
+        testCaseJSON();
+
         // So far all test cases have been tested with extreme and random values
         // and are all working as intended.
-        // and are all working as intended.
+    }
+
+    public static void testCaseJSON() {
+        JSON json = new JSON("{\n" +
+                "    \"totalValue\": 4.437,\n" +
+                "    \"expiredTransactions\": [\n" +
+                "    ],\n" +
+                "    \"assets\": [\n" +
+                "        {\n" +
+                "            \"amount\": 17.0,\n" +
+                "            \"totalCost\": 3.6099999999999994,\n" +
+                "            \"coin\": {\n" +
+                "                \"symbol\": \"DOGE\",\n" +
+                "                \"name\": \"Doge Coin\"\n" +
+                "            }\n" +
+                "        }\n" +
+                "    ],\n" +
+                "    \"balance\": 10.0,\n" +
+                "    \"timeSinceLastUpdate\": \"2021-11-17T21:25:22.618365800-06:00\",\n" +
+                "    \"completedTransactions\": [\n" +
+                "        {\n" +
+                "            \"amount\": 10.0,\n" +
+                "            \"expired\": false,\n" +
+                "            \"price\": 0.261,\n" +
+                "            \"buy\": true,\n" +
+                "            \"time\": \"2021-11-17T21:25:18.563730700-06:00\",\n" +
+                "            \"type\": \"Market Trade\",\n" +
+                "            \"crypto\": {\n" +
+                "                \"symbol\": \"DOGE\",\n" +
+                "                \"name\": \"Doge Coin\"\n" +
+                "            }\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"amount\": 10.0,\n" +
+                "            \"expired\": false,\n" +
+                "            \"price\": 1.0,\n" +
+                "            \"buy\": true,\n" +
+                "            \"time\": \"2021-11-17T21:25:18.595759500-06:00\",\n" +
+                "            \"type\": \"Limit Trade\",\n" +
+                "            \"crypto\": {\n" +
+                "                \"symbol\": \"DOGE\",\n" +
+                "                \"name\": \"Doge Coin\"\n" +
+                "            }\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"amount\": 3.0,\n" +
+                "            \"expired\": false,\n" +
+                "            \"price\": 0.261,\n" +
+                "            \"buy\": true,\n" +
+                "            \"time\": \"2021-11-17T21:25:20.610357400-06:00\",\n" +
+                "            \"type\": \"Market Trade\",\n" +
+                "            \"crypto\": {\n" +
+                "                \"symbol\": \"DOGE\",\n" +
+                "                \"name\": \"Doge Coin\"\n" +
+                "            }\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"amount\": 3.0,\n" +
+                "            \"expired\": false,\n" +
+                "            \"price\": 0.261,\n" +
+                "            \"buy\": false,\n" +
+                "            \"time\": \"2021-11-17T21:25:20.611358400-06:00\",\n" +
+                "            \"type\": \"Market Trade\",\n" +
+                "            \"crypto\": {\n" +
+                "                \"symbol\": \"DOGE\",\n" +
+                "                \"name\": \"Doge Coin\"\n" +
+                "            }\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"amount\": 3.0,\n" +
+                "            \"expired\": false,\n" +
+                "            \"price\": 3.0,\n" +
+                "            \"buy\": false,\n" +
+                "            \"time\": \"2021-11-17T21:25:22.611358400-06:00\",\n" +
+                "            \"type\": \"Limit Trade\",\n" +
+                "            \"crypto\": {\n" +
+                "                \"symbol\": \"DOGE\",\n" +
+                "                \"name\": \"Doge Coin\"\n" +
+                "            }\n" +
+                "        }\n" +
+                "    ],\n" +
+                "    \"name\": \"First P\",\n" +
+                "    \"orderManager\": {\n" +
+                "        \"orders\": [\n" +
+                "        ],\n" +
+                "        \"transactions\": [\n" +
+                "        ]\n" +
+                "    }\n" +
+                "}");
+        System.out.println("Assets:\n" + json.get("assets").toString());
+        System.out.println("\nTEST CASE JSON\n");
+        System.out.println("Printing the current portfolio as json");
+        System.out.println(model.getCurrentPortfolioJSON().toString());
+        System.out.println("Attempting to construct portfolio data from file");
+        model.setCurrentPortfolioJSON(json);
+        System.out.println(model.getCurrentPortfolioString());
     }
 
     public static void testCase4() throws InterruptedException {

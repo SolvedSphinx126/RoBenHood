@@ -1,0 +1,86 @@
+{
+    "totalValue": 4.437,
+    "expiredTransactions": [
+    ],
+    "assets": [
+        {
+            "amount": 17.0,
+            "totalCost": 3.6099999999999994,
+            "coin": {
+                "symbol": "DOGE",
+                "name": "Doge Coin"
+            }
+        }
+    ],
+    "balance": 10.0,
+    "timeSinceLastUpdate": "2021-11-17T21:25:22.618365800-06:00",
+    "completedTransactions": [
+        {
+            "amount": 10.0,
+            "expired": false,
+            "price": 0.261,
+            "buy": true,
+            "time": "2021-11-17T21:25:18.563730700-06:00",
+            "type": "Market Trade",
+            "crypto": {
+                "symbol": "DOGE",
+                "name": "Doge Coin"
+            }
+        },
+        {
+            "amount": 10.0,
+            "expired": false,
+            "price": 1.0,
+            "buy": true,
+            "time": "2021-11-17T21:25:18.595759500-06:00",
+            "type": "Limit Trade",
+            "crypto": {
+                "symbol": "DOGE",
+                "name": "Doge Coin"
+            }
+        },
+        {
+            "amount": 3.0,
+            "expired": false,
+            "price": 0.261,
+            "buy": true,
+            "time": "2021-11-17T21:25:20.610357400-06:00",
+            "type": "Market Trade",
+            "crypto": {
+                "symbol": "DOGE",
+                "name": "Doge Coin"
+            }
+        },
+        {
+            "amount": 3.0,
+            "expired": false,
+            "price": 0.261,
+            "buy": false,
+            "time": "2021-11-17T21:25:20.611358400-06:00",
+            "type": "Market Trade",
+            "crypto": {
+                "symbol": "DOGE",
+                "name": "Doge Coin"
+            }
+        },
+        {
+            "amount": 3.0,
+            "expired": false,
+            "price": 3.0,
+            "buy": false,
+            "time": "2021-11-17T21:25:22.611358400-06:00",
+            "type": "Limit Trade",
+            "crypto": {
+                "symbol": "DOGE",
+                "name": "Doge Coin"
+            }
+        }
+    ],
+    "name": "First P",
+    "orderManager": {
+        "orders": [
+        ],
+        "transactions": [
+        ]
+    }
+}

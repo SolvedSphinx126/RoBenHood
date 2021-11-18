@@ -66,13 +66,13 @@ public abstract class Order implements JSONObject {
 
         json.put("buy", buy);
         json.put("price", price);
-        json.put("createTime", createTime);
-        json.put("expireTime", expireTime);
+        json.put("createTime", createTime.toString());
+        json.put("expireTime", expireTime.toString());
         json.put("crypto", crypto);
         json.put("transaction", transaction);
         json.put("type", type);
         json.put("amount", amount);
-
+        System.out.println("\n\n\n\n\n\n\n\n\n");
         return json;
     }
 }

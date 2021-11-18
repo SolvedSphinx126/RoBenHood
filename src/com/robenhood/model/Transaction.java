@@ -93,7 +93,7 @@ public class Transaction implements JSONObject {
     public JSON toJSON() {
         JSON json = new JSON();
 
-        json.put("time", time);
+        json.put("time", time.toString());
         json.put("crypto", crypto);
         json.put("price", price);
         json.put("amount", amount);

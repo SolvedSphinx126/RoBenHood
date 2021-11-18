@@ -1,8 +1,8 @@
 package com.robenhood.model;
 
+import com.robenhood.data.JSON;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Model {
     private Portfolio currentPortfolio;
@@ -24,6 +24,10 @@ public class Model {
 
     public void setCurrentPortfolio(Portfolio p) {
         currentPortfolio = p;
+    }
+
+    public void setCurrentPortfolioJSON(JSON json) {
+        currentPortfolio = new Portfolio(json);
     }
 
     public void createPortfolio(String name) {
@@ -63,11 +67,16 @@ public class Model {
         currentPortfolio.setName(name);
     }
 
-    public String GetCurrentPortfolioName() {
+    public String getCurrentPortfolioName() {
         return currentPortfolio.getName();
     }
 
     public String getCurrentPortfolioString() {
         return currentPortfolio.toString();
+    }
+
+    // For testing only
+    public JSON getCurrentPortfolioJSON() {
+        return currentPortfolio.toJSON();
     }
 }
