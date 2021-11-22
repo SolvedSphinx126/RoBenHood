@@ -11,7 +11,7 @@ public class FileManager {
     public static final File appData = new File(appDataPath);
 
     public static boolean saveStringToFile(String json, String fileName) {
-        String filePath = appDataPath + fileName;
+        String filePath = appDataPath + fileName + ".por"; // Append .por file extension to files
         System.out.println("Saving \"" + filePath + "\"");
 
         try {
@@ -19,7 +19,7 @@ public class FileManager {
         } catch (IOException e) {
             System.out.println("Trying to create \"" + appDataPath + "\".");
             if (appData.mkdirs())
-                return saveStringToFile(fileName, json);
+                return saveStringToFile(json, fileName);
             return false;
         }
 
@@ -29,7 +29,7 @@ public class FileManager {
 
     public static String loadStringFromFile(String fileName) throws IOException {
 
-        String filePath = appDataPath + fileName;
+        String filePath = appDataPath + fileName + ".por"; // Append .por file extension to files
         System.out.println("Loading \"" + filePath + "\"");
 
         return Files.readString(Path.of(filePath));
@@ -47,7 +47,7 @@ public class FileManager {
         for (int i = 0; i < files.length; i++) {
             File file = files[i];
             if (file.isFile() && file.toString().endsWith(".por"))
-                paths[i] = file.toString().replace(appDataPath, "");
+                paths[i] = file.toString().replace(appDataPath, "").replace(".por", "");
 
         }
 
