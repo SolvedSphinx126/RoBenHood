@@ -78,4 +78,20 @@ public abstract class Order implements JSONObject {
         json.put("amount", amount);
         return json;
     }
+
+    @Override
+    public String toString() {
+        String str = "";
+
+        str += "Type: " + type;
+        str += ", Amount: " + amount;
+        str += ", Crypto: " + crypto;
+        str += ", Buy: " + buy;
+        str += ", Price: " + price;
+        str += ", CreateTime: " + createTime;
+        str += ", ExpireTime: " + expireTime;
+        str += ", Transaction: " + transaction.toString();
+
+        return str;
+    }
 }
