@@ -42,6 +42,18 @@ public class OrderManager implements JSONObject {
         }
     }
 
+    public void cancelOrder(OffsetDateTime createTime) {
+        for (Order o : orders) {
+            if (o.getCreateTime().equals(createTime)) {
+                o.cancel();
+            }
+        }
+    }
+
+    public ArrayList<Order> getOrders() {
+        return orders;
+    }
+
     public ArrayList<Crypto> getLackingCryptos(ArrayList<Asset> assets) {
         boolean has = false;
         ArrayList<Crypto> lacking = new ArrayList<>();

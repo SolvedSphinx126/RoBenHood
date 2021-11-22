@@ -2,6 +2,7 @@ package com.robenhood.model;
 
 import com.robenhood.data.JSON;
 import com.robenhood.data.JSONObject;
+import com.robenhood.model.orders.Order;
 
 import java.lang.reflect.Array;
 import java.time.OffsetDateTime;
@@ -126,6 +127,14 @@ public class Portfolio implements JSONObject {
 
     public void addOrder(String type, Crypto crypto, boolean buy, double price, OffsetDateTime expireTime, double amount) {
         orderManager.addOrder(type, crypto, buy, price, expireTime, amount);
+    }
+
+    public void cancelOrder(OffsetDateTime createTime) {
+        orderManager.cancelOrder(createTime);
+    }
+
+    public ArrayList<Order> getOrders() {
+        return orderManager.getOrders();
     }
 
     public double getBalance() {

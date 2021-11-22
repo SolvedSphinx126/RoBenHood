@@ -2,8 +2,7 @@ package com.robenhood.model;
 
 import com.robenhood.data.FileManager;
 import com.robenhood.data.JSON;
-
-import java.lang.reflect.Array;
+import com.robenhood.model.orders.Order;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +58,10 @@ public class Model {
         currentPortfolio.addOrder(type, crypto, buy, price, expireTime, amount);
     }
 
+    public void cancelOrder(OffsetDateTime createTime) {
+        currentPortfolio.cancelOrder(createTime);
+    }
+
     public void update() {
         currentPortfolio.update();
     }
@@ -73,6 +76,10 @@ public class Model {
 
     public ArrayList<Transaction> getCurrentPortfolioExpiredTransactions() {
         return currentPortfolio.getExpiredTransactions();
+    }
+
+    public ArrayList<Order> getCurrentPortfolioOrders() {
+        return currentPortfolio.getOrders();
     }
 
     public double getCurrentPortfolioTotalValue() {

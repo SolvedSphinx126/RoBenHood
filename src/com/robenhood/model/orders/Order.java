@@ -40,6 +40,10 @@ public abstract class Order implements JSONObject {
         return crypto;
     }
 
+    public OffsetDateTime getCreateTime() {
+        return createTime;
+    }
+
     public void cancel() {
         expireTime = OffsetDateTime.now();
     }
