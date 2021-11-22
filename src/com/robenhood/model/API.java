@@ -1,6 +1,13 @@
 package com.robenhood.model;
+import com.robenhood.data.JSON;
+
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -8,7 +15,6 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
-import java.util.Scanner;
 
 
 public class API {
@@ -25,15 +31,11 @@ public class API {
     }
 
 
-
-
     public static void main(String[] args) {
-        //getCryptoValue(OffsetDateTime.now(), "eth");
-        getHistoryData(OffsetDateTime.now().minusDays(5), OffsetDateTime.now(), "ETH");
 
+        //System.out.println(getHistoryData(OffsetDateTime.now().minusDays(20), OffsetDateTime.now(), "ETH"));
+        System.out.println(getCryptoValue(OffsetDateTime.now(), "doge"));
     }
-
-
 
     private static String getResponse(URI uri) {
         StringBuilder jsonResponse = new StringBuilder();
@@ -47,20 +49,41 @@ public class API {
         return jsonResponse.toString();
     }
 
-
-
     public static double getCryptoValue(OffsetDateTime time, String symbol) {
         URI tempUrl = uri1.resolve(symbol + "usd/price");
         String response = getResponse(tempUrl);
-        System.out.println(response);
-        return 0;
+        JSON json = new JSON(response);
+        JSON result = new JSON(json.get("result").toString());
+        return (double) result.get("price");
     }
 
     public static HashMap<OffsetDateTime, Double> getHistoryData(OffsetDateTime startTime, OffsetDateTime endTime, String symbol) {
         URI tempUrl = uri2.resolve("exchange-rates/history?key=" + api2key + "&currency=" + symbol + "&start=" + timeFix(startTime) + "Z&end=" + timeFix(endTime) + "Z");
         String response = getResponse(tempUrl);
-        System.out.println(response);
-        return null;
+        JSON json = new JSON(response);
+        JSON fixedJSON = new JSON(json.get("0").toString());
+
+        OffsetDateTime timestamp;
+        double rate;
+        HashMap<OffsetDateTime, Double> results = new HashMap<>();
+
+        int i = 0;
+        JSON element;
+
+        while(fixedJSON.containsKey(Integer.toString(i)))
+        {
+            element = new JSON(fixedJSON.get(Integer.toString(i)).toString());
+            timestamp = OffsetDateTime.ofInstant(Instant.parse(element.get("timestamp").toString()), ZoneId.systemDefault());
+            rate = (double) element.get("rate");
+            results.put(timestamp, rate);
+            i++;
+
+        }
+
+
+
+
+        return results;
     }
 
     public static String timeFix(OffsetDateTime time)
@@ -70,4 +93,6 @@ public class API {
         result = result.substring(0, result.indexOf('.'));
         return result;
     }
+
+
 }
