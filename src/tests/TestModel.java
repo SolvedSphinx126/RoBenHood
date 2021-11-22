@@ -28,5 +28,12 @@ public class TestModel {
         for (String str : model.getPotentialPortfolios()) {
             System.out.print("    " + str + "\n");
         }
+
+        System.out.println("Attempting to delete SecondP (it is not selected as current portfolio)");
+        model.deletePortfolio("SecondP");
+        System.out.println("Potential portfolios: ");
+        for (String str : model.getPotentialPortfolios()) {
+            System.out.print("    " + str + "\n");
+        }
     }
 }

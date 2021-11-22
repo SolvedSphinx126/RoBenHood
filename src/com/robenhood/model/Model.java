@@ -50,9 +50,15 @@ public class Model {
         }
     }
 
-    /*public void deletePortfolio(String name) {
-        potentialPortfolios.remove(name);
-    }*/
+    public boolean deletePortfolio(String name) {
+        // Will not delete the current portfolio
+        if (!currentPortfolio.getName().equals(name)) {
+            boolean val = FileManager.deleteFile(name);
+            updatePortfolioList();
+            return val;
+        }
+        return false;
+    }
 
     public void addOrder(String type, Crypto crypto, boolean buy, double price, OffsetDateTime expireTime, double amount) {
         currentPortfolio.addOrder(type, crypto, buy, price, expireTime, amount);

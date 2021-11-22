@@ -36,6 +36,19 @@ public class FileManager {
 
     }
 
+    public static boolean deleteFile(String fileName) {
+        String filePath = appDataPath + fileName + ".por"; // Append .por file extension to files
+        System.out.println("Deleting \"" + filePath + "\"");
+
+        try {
+            Files.delete(Path.of(filePath));
+            return true;
+        } catch (IOException e) {
+            System.out.println("Could not delete file with name " + fileName);
+            return false;
+        }
+    }
+
     public static String[] getPortfolioPaths() {
         File[] files = appData.listFiles();
 
