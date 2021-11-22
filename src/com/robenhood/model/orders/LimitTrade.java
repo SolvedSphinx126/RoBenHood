@@ -1,5 +1,6 @@
 package com.robenhood.model.orders;
 
+import com.robenhood.data.JSON;
 import com.robenhood.model.Crypto;
 import com.robenhood.model.Transaction;
 import java.time.OffsetDateTime;
@@ -18,19 +19,25 @@ public class LimitTrade extends Order {
         createTime = OffsetDateTime.now();
     }
 
-    @Override
-    public void makeOrder(HashMap<OffsetDateTime, Double> data) {
-        for (Map.Entry<OffsetDateTime, Double> entry : data.entrySet()) {
-            if (buy && entry.getValue() <= price && entry.getKey().isBefore(expireTime)) {
-                transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, true);
-            } else if (!buy && entry.getValue() >= price && entry.getKey().isBefore(expireTime)) {
-                transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, false);
-            }
-        }
+    public LimitTrade(JSON json) {
+        type = (String) json.get("type");
+        buy = (boolean) json.get("buy");
+        crypto = new Crypto((JSON) json.get("crypto"));
+        amount = (double) json.get("amount");
+        createTime = OffsetDateTime.parse((String) json.get("createTime"));
+        price = (double) json.get("price");
+        expireTime = OffsetDateTime.parse((String) json.get("expireTime"));
+        transaction = new Transaction((JSON) json.get("transaction"));
     }
 
     @Override
-    public Transaction executeOrder() {
-        return transaction;
+    public void makeOrder(HashMap<OffsetDateTime, Double> data) {
+        for (Map.Entry<OffsetDateTime, Double> entry : data.entrySet()) {
+            if (buy && entry.getValue() <= price) {
+                transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, true, !entry.getKey().isBefore(expireTime), type);
+            } else if (!buy && entry.getValue() >= price) {
+                transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, false, !entry.getKey().isBefore(expireTime), type);
+            }
+        }
     }
 }
