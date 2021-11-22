@@ -26,6 +26,7 @@ public class GUIMain extends JDialog {
         String [] ListData = {"Profile 1", "Profile 2", "Profile 3"};
         listUpdate(ListData);
         profileLabel.setText(ListData[0]);
+        tradesList.setListData(ListData);
 
         profileList.addListSelectionListener(new ListSelectionListener() {
             @Override
