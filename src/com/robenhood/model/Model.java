@@ -40,7 +40,6 @@ public class Model {
         currentPortfolio = p;
         // Save the new portfolio to add the name to the list
         FileManager.saveStringToFile(p.toJSON().toString(), name);
-        updatePortfolioList();
     }
 
     public void saveCurrentPortfolio() {
@@ -53,9 +52,7 @@ public class Model {
     public boolean deletePortfolio(String name) {
         // Will not delete the current portfolio
         if (!currentPortfolio.getName().equals(name)) {
-            boolean val = FileManager.deleteFile(name);
-            updatePortfolioList();
-            return val;
+            return FileManager.deleteFile(name);
         }
         return false;
     }
@@ -109,12 +106,20 @@ public class Model {
     }
 
     public ArrayList<String> getPotentialPortfolios() {
+        updatePortfolioList();
         return potentialPortfolios;
     }
 
-    public void setCurrentPortfolioName(String name) {
-        // TODO make filemanager delete the old one or add a method for changing the name
+    // This is sloppy I know
+    public boolean setCurrentPortfolioName(String name) {
+        String oldName = currentPortfolio.getName();
         currentPortfolio.setName(name);
+        currentPortfolio = new Portfolio(new JSON(currentPortfolio.toJSON().toString()));
+        // Delete the file with the old name
+        boolean val = FileManager.deleteFile(oldName);
+        // This is just extra, should have been saved upon creation
+        saveCurrentPortfolio();
+        return val;
     }
 
     // For testing only

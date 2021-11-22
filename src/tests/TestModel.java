@@ -35,5 +35,14 @@ public class TestModel {
         for (String str : model.getPotentialPortfolios()) {
             System.out.print("    " + str + "\n");
         }
+
+        System.out.println("Current portfolio name: " + model.getCurrentPortfolioName());
+        System.out.println("Attempting to change name to FirstPModified");
+        System.out.println("Success?: " + model.setCurrentPortfolioName("FirstPModified"));
+        System.out.println("Potential portfolios: ");
+        for (String str : model.getPotentialPortfolios()) {
+            System.out.print("    " + str + "\n");
+        }
+        System.out.println("Current portfolio name: " + model.getCurrentPortfolioName());
     }
 }
