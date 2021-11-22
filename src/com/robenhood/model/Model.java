@@ -114,6 +114,7 @@ public class Model {
     public boolean setCurrentPortfolioName(String name) {
         String oldName = currentPortfolio.getName();
         currentPortfolio.setName(name);
+        // Have to do it this complicated way and not just currentPortfolio.toJSON(). Don't really know why
         currentPortfolio = new Portfolio(new JSON(currentPortfolio.toJSON().toString()));
         // Delete the file with the old name
         boolean val = FileManager.deleteFile(oldName);
