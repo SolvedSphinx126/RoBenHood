@@ -2,6 +2,8 @@ package com.robenhood.model;
 
 import com.robenhood.data.FileManager;
 import com.robenhood.data.JSON;
+
+import java.lang.reflect.Array;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +61,18 @@ public class Model {
 
     public void update() {
         currentPortfolio.update();
+    }
+
+    public ArrayList<Asset> getCurrentPortfolioAssets() {
+        return currentPortfolio.getAssets();
+    }
+
+    public ArrayList<Transaction> getCurrentPortfolioCompletedTransactions() {
+        return currentPortfolio.getCompletedTransactions();
+    }
+
+    public ArrayList<Transaction> getCurrentPortfolioExpiredTransactions() {
+        return currentPortfolio.getExpiredTransactions();
     }
 
     public double getCurrentPortfolioTotalValue() {

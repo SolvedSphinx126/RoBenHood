@@ -157,6 +157,10 @@ public class Portfolio implements JSONObject {
         return expiredTransactions;
     }
 
+    public ArrayList<Asset> getAssets() {
+        return assets;
+    }
+
     // For debugging purposes basically
     @Override
     public String toString() {
