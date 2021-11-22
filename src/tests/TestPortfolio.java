@@ -10,7 +10,7 @@ public class TestPortfolio {
     static Model model = new Model();
     static Portfolio portfolio = new Portfolio("First P");
     public static void main(String[] args) throws InterruptedException {
-        model.setCurrentPortfolio(portfolio);
+        model.setCurrentPortfolioC(portfolio);
         testCase1();
         testCase2();
         testCase3();
