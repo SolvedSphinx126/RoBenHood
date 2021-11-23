@@ -3,10 +3,6 @@ import com.robenhood.data.JSON;
 
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -34,7 +30,7 @@ public class API {
     public static void main(String[] args) {
 
         //System.out.println(getHistoryData(OffsetDateTime.now().minusDays(20), OffsetDateTime.now(), "ETH"));
-        System.out.println(getCryptoValue(OffsetDateTime.now(), "doge"));
+        //System.out.println(getCryptoValue(OffsetDateTime.now(), "doge"));
     }
 
     private static String getResponse(URI uri) {
