@@ -53,6 +53,7 @@ public class Controller {
     }
 
     public void update() {
+        //TODO add aView.refresh()
         aModel.update();
     }
 
