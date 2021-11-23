@@ -20,7 +20,11 @@ public class GUIMain extends JDialog {
     private JLabel currentTicker;
     private JButton changeTicker;
     private JList tradesList;
-    private JList list1;
+    private JList expList;
+    private JButton newPortButton;
+    private JButton deleteSelectedPortfolioButton;
+    private JTextField newPortField;
+    private JList assetList;
     private JButton updateList;
 
     public GUIMain() {
@@ -29,7 +33,7 @@ public class GUIMain extends JDialog {
         Model userModel = new Model();
         setModal(true);
         getRootPane().setDefaultButton(buttonQuit);
-        ArrayList <String> ListData = new ArrayList<String>();
+        ArrayList <String> ListData = userModel.getPotentialPortfolios();
         ArrayList <String> TradeData = new ArrayList<String>();
         ListData.add("Profile 1");
         ListData.add("Profile 2");
@@ -46,7 +50,7 @@ public class GUIMain extends JDialog {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 String selection = profileList.getSelectedValue().toString();
-                //userModel.setCurrentPortfolio(selection);
+                userModel.setCurrentPortfolio(selection);
                 profileLabel.setText(selection);
             }
         });
@@ -75,6 +79,22 @@ public class GUIMain extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 tickChange();
+            }
+        });
+
+        newPortButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                userModel.createNewPortfolio(newPortField.getText());
+                ListData.add(newPortField.getText());
+                profileUpdate(ListData);
+            }
+        });
+        deleteSelectedPortfolioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                userModel.deletePortfolio(profileList.getSelectedValue().toString());
+                profileUpdate(ListData);
             }
         });
     }
