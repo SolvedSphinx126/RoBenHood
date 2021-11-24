@@ -33,18 +33,17 @@ public class GUIMain extends JDialog {
         Model userModel = new Model();
         setModal(true);
         getRootPane().setDefaultButton(buttonQuit);
-        ArrayList <String> ListData = userModel.getPotentialPortfolios();
+        //ArrayList <String> ListData = userModel.getPotentialPortfolios();
         ArrayList <String> TradeData = new ArrayList<String>();
-        ListData.add("Profile 1");
-        ListData.add("Profile 2");
-        ListData.add("Profile 3");
-        profileUpdate(ListData);
+        //profileUpdate(ListData);
+        profileUpdate(userModel.getPotentialPortfolios());
         TradeData.add("Trade1   Value1  Date1   Complete");
         TradeData.add("Trade2   Value2  Date2   Canceled");
         TradeData.add("Trade3   Value3  Date3   Incomplete");
         tradeUpdate(TradeData);
-        profileLabel.setText(ListData.get(0));
+        //profileLabel.setText(ListData.get(0));
         tradesList.setListData(TradeData.toArray());
+
 
         profileList.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -86,15 +85,14 @@ public class GUIMain extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 userModel.createNewPortfolio(newPortField.getText());
-                ListData.add(newPortField.getText());
-                profileUpdate(ListData);
+                profileUpdate(userModel.getPotentialPortfolios());
             }
         });
         deleteSelectedPortfolioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                userModel.deletePortfolio(profileList.getSelectedValue().toString());
-                profileUpdate(ListData);
+                userModel.deletePortfolio(userModel.getCurrentPortfolioName());
+                profileUpdate(userModel.getPotentialPortfolios());
             }
         });
     }
