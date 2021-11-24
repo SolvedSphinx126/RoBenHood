@@ -51,57 +51,94 @@ public class Model {
 
     public boolean deletePortfolio(String name) {
         // Will not delete the current portfolio
-        if (!currentPortfolio.getName().equals(name)) {
+        if (currentPortfolio != null && !currentPortfolio.getName().equals(name)) {
             return FileManager.deleteFile(name);
         }
         return false;
     }
 
     public void addOrder(String type, Crypto crypto, boolean buy, double price, OffsetDateTime expireTime, double amount) {
+        if (currentPortfolio == null) {
+            return;
+        }
         currentPortfolio.addOrder(type, crypto, buy, price, expireTime, amount);
     }
 
     public void cancelOrder(OffsetDateTime createTime) {
+        if (currentPortfolio == null) {
+            return;
+        }
         currentPortfolio.cancelOrder(createTime);
     }
 
     public void update() {
+        if (currentPortfolio == null) {
+            return;
+        }
         currentPortfolio.update();
+        updatePortfolioList();
     }
 
     public ArrayList<Asset> getCurrentPortfolioAssets() {
+        if (currentPortfolio == null) {
+            return null;
+        }
         return currentPortfolio.getAssets();
     }
 
     public ArrayList<Transaction> getCurrentPortfolioCompletedTransactions() {
+        if (currentPortfolio == null) {
+            return null;
+        }
         return currentPortfolio.getCompletedTransactions();
     }
 
     public ArrayList<Transaction> getCurrentPortfolioExpiredTransactions() {
+        if (currentPortfolio == null) {
+            return null;
+        }
         return currentPortfolio.getExpiredTransactions();
     }
 
     public ArrayList<Order> getCurrentPortfolioOrders() {
+        if (currentPortfolio == null) {
+            return null;
+        }
         return currentPortfolio.getOrders();
     }
 
     public double getCurrentPortfolioTotalValue() {
+        if (currentPortfolio == null) {
+            return 0;
+        }
         return currentPortfolio.getTotalValue();
     }
 
     public double getCurrentPortfolioBalance() {
+        if (currentPortfolio == null) {
+            return 0;
+        }
         return currentPortfolio.getBalance();
     }
 
     public void incrementCurrentPortfolioBalance(double value) {
+        if (currentPortfolio == null) {
+            return;
+        }
         currentPortfolio.incrementBalance(value);
     }
 
     public String getCurrentPortfolioName() {
+        if (currentPortfolio == null) {
+            return "";
+        }
         return currentPortfolio.getName();
     }
 
     public String getCurrentPortfolioString() {
+        if (currentPortfolio == null) {
+            return "";
+        }
         return currentPortfolio.toString();
     }
 
@@ -112,6 +149,9 @@ public class Model {
 
     // This is sloppy I know
     public boolean setCurrentPortfolioName(String name) {
+        if (currentPortfolio == null) {
+            return false;
+        }
         String oldName = currentPortfolio.getName();
         currentPortfolio.setName(name);
         // Have to do it this complicated way and not just currentPortfolio.toJSON(). Don't really know why
@@ -123,8 +163,11 @@ public class Model {
         return val;
     }
 
-    // For testing only
+    // For testing mostly
     public JSON getCurrentPortfolioJSON() {
+        if (currentPortfolio == null) {
+            return null;
+        }
         return currentPortfolio.toJSON();
     }
 
