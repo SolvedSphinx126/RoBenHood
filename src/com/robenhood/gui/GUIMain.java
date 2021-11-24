@@ -13,7 +13,9 @@ import java.time.OffsetDateTime;
 public class GUIMain extends JFrame {
     private JPanel contentPane;
     private JButton buttonQuit;
+    private JTabbedPane tabbedPane1;
     private JList profileList;
+    private JPanel labelPanel;
     private JLabel selectedPort;
     private JButton newPortButton;
     private JButton deletePortButton;
