@@ -61,4 +61,12 @@ public class Crypto implements JSONObject {
 
         return json;
     }
+
+    public String toString() {
+        String str = "";
+
+        str += "Name: " + name;
+        str += ", Symbol: " + symbol;
+        return str;
+    }
 }

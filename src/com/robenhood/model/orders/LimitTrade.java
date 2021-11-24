@@ -27,16 +27,23 @@ public class LimitTrade extends Order {
         createTime = OffsetDateTime.parse((String) json.get("createTime"));
         price = (double) json.get("price");
         expireTime = OffsetDateTime.parse((String) json.get("expireTime"));
-        transaction = new Transaction((JSON) json.get("transaction"));
+        if (json.get("transaction").equals("null")) {
+            transaction = null;
+        } else {
+            transaction = new Transaction((JSON) json.get("transaction"));
+        }
     }
 
     @Override
     public void makeOrder(HashMap<OffsetDateTime, Double> data) {
         for (Map.Entry<OffsetDateTime, Double> entry : data.entrySet()) {
-            if (buy && entry.getValue() <= price) {
-                transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, true, !entry.getKey().isBefore(expireTime), type);
+            // This means the order is expired
+            if (expireTime.isBefore(entry.getKey())) {
+                transaction = new Transaction(entry.getKey(), crypto, price, amount, buy, true, type);
+            } else if (buy && entry.getValue() <= price) {
+                transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, true, false, type);
             } else if (!buy && entry.getValue() >= price) {
-                transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, false, !entry.getKey().isBefore(expireTime), type);
+                transaction = new Transaction(entry.getKey(), crypto, entry.getValue(), amount, false, false, type);
             }
         }
     }

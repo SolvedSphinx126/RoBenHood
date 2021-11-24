@@ -52,7 +52,8 @@ public class Asset implements JSONObject {
         str += "Crypto: " + coin.getName();
         str += ", Amount: " + amount;
         str += ", Total Cost: " + totalCost;
-        str += ", Average Value (totalMoneySpent / totalAmountOfCoin): " + getAverageValue();
+        str += ",\n    ";
+        str += "Average Value (totalMoneySpent / totalAmountOfCoin): " + getAverageValue();
         return str;
     }
 
