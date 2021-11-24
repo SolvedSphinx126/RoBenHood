@@ -44,7 +44,7 @@ public class OrderManager implements JSONObject {
 
     public void cancelOrder(OffsetDateTime createTime) {
         for (Order o : orders) {
-            if (o.getCreateTime().equals(createTime)) {
+            if (o.getCreateTime().toString().equals(createTime.toString())) {
                 o.cancel();
             }
         }

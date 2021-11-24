@@ -6,8 +6,9 @@ import com.robenhood.model.Model;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.OffsetDateTime;
-import java.util.Spliterator;
 
 public class GUIMain extends JFrame {
     private JPanel contentPane;
@@ -37,10 +38,18 @@ public class GUIMain extends JFrame {
     private JButton updateTransactionsButton;
     private JButton updateButton;
     private JTextField cryptoNameText;
-    private JTextField crytpoTickerText;
+    private JTextField cryptoTickerText;
     private JButton getCryptoPriceButton;
-    private JTextArea cryptoPriceTextArea;
-    private JButton updateList;
+    private JTextField cryptoPriceTextArea;
+    private JButton loadPortfoliosButton;
+    private JTextField addMoneyAmount;
+    private JButton confirmAddMoneyButton;
+    private JTextField portfolioBalanceText;
+    private JTextField portfolioValueText;
+    private JButton saveButton;
+    private JButton selectOrderButton;
+    private JButton cancelOrderButton;
+    private JTextArea selectedOrderText;
 
     private Model model;
 
@@ -54,15 +63,82 @@ public class GUIMain extends JFrame {
         initContents();
 
         this.pack();
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         this.setVisible(true);
     }
 
     private void initContents() {
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                onQuit();
+            }
+        });
+
         buttonQuit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 onQuit();
+            }
+        });
+
+        selectOrderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedOrderText.setText(ordersList.getSelectedValue().toString());
+            }
+        });
+
+        cancelOrderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectedOrderText.getText().equals("")) {
+                    JOptionPane.showMessageDialog(contentPane, "Please select an order to cancel");
+                } else {
+                    // Extract creation date from selected order
+                    int beginIndex = selectedOrderText.getText().indexOf("CreateTime: ") + ("CreateTime: ".length());
+                    int endIndex = selectedOrderText.getText().indexOf(",", beginIndex);
+                    String date = selectedOrderText.getText().substring(beginIndex, endIndex);
+                    System.out.println("Removing date: " + date + "\n   Parsed to: " + OffsetDateTime.parse(date));
+                    model.cancelOrder(OffsetDateTime.parse(date));
+                }
+            }
+        });
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                save();
+            }
+        });
+
+        confirmAddMoneyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectedPort.getText().equals("")) {
+                    JOptionPane.showMessageDialog(contentPane, "Please select a portfolio to add money to");
+                } else {
+                    model.incrementCurrentPortfolioBalance(Double.parseDouble(addMoneyAmount.getText()));
+                    update();
+                }
+            }
+        });
+
+        loadPortfoliosButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updatePortfolioList();
+            }
+        });
+
+        updateOrdersButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectedPort.getText().equals("")) {
+                    JOptionPane.showMessageDialog(contentPane, "Please select a portfolio to update orders of");
+                } else {
+                    update();
+                    updateOrdersList();
+                }
             }
         });
 
@@ -89,6 +165,7 @@ public class GUIMain extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 selectedPort.setText(profileList.getSelectedValue().toString());
                 model.setCurrentPortfolio(selectedPort.getText());
+                update();
             }
         });
 
@@ -114,10 +191,6 @@ public class GUIMain extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (selectedPort.getText().equals("")) {
                     JOptionPane.showMessageDialog(contentPane, "Please select a portfolio to add the order to");
-                } else if (orderTypeBox.getSelectedItem().toString().equals("Limit Trade")) {
-                    if (orderPriceTextField.getText().equals("")) {
-                        JOptionPane.showMessageDialog(contentPane, "Please enter a price");
-                    }
                 } else if (orderCryptoName.getText().equals("")) {
                     JOptionPane.showMessageDialog(contentPane, "Please enter a crypto name");
                 } else if (orderCryptoTicker.getText().equals("")) {
@@ -162,6 +235,7 @@ public class GUIMain extends JFrame {
                     }
                     model.addOrder(orderTypeBox.getSelectedItem().toString(), new Crypto(orderCryptoName.getText(), orderCryptoTicker.getText()), buyBooleanBox.isSelected(),
                             Double.parseDouble(orderPriceTextField.getText()), time, Double.parseDouble(orderAmountText.getText()));
+                    JOptionPane.showMessageDialog(contentPane, "Order successfully added!");
                 }
             }
         });
@@ -182,23 +256,51 @@ public class GUIMain extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (cryptoNameText.getText().equals("")) {
                     JOptionPane.showMessageDialog(contentPane, "Please enter a crypto name");
-                } else if (crytpoTickerText.getText().equals("")) {
+                } else if (cryptoTickerText.getText().equals("")) {
                     JOptionPane.showMessageDialog(contentPane, "Please enter the crypto ticker for the name");
                 } else {
-                    cryptoPriceTextArea.setText("$" + API.getCryptoValue(OffsetDateTime.now(), crytpoTickerText.getText()));
+                    cryptoPriceTextArea.setText("$" + API.getCryptoValue(OffsetDateTime.now(), cryptoTickerText.getText()));
                 }
             }
         });
     }
 
     private void update() {
-        model.update();
-        updatePortfolioList();
-        updateAssetList();
+        if (selectedPort.getText().equals("")) {
+            updatePortfolioList();
+        } else {
+            model.update();
+            updatePortfolioList();
+            updateAssetList();
+            updateOrdersList();
+            updateTransactionsList();
+            updateBalance();
+            updateValue();
+        }
     }
 
     private void onQuit() {
+        save();
         dispose();
+    }
+
+    private void save() {
+        update();
+        if (!selectedPort.getText().equals("")) {
+            model.saveCurrentPortfolio();
+        }
+    }
+
+    private void updateBalance() {
+        portfolioBalanceText.setText("$" + model.getCurrentPortfolioBalance());
+    }
+
+    private void updateValue() {
+        portfolioValueText.setText("$" + model.getCurrentPortfolioTotalValue());
+    }
+
+    private void updateOrdersList() {
+        ordersList.setListData(model.getCurrentPortfolioOrders().toArray());
     }
 
     private void updateTransactionsList() {

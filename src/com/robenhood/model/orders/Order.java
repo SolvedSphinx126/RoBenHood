@@ -86,11 +86,18 @@ public abstract class Order implements JSONObject {
         str += "Type: " + type;
         str += ", Amount: " + amount;
         str += ", Crypto: " + crypto;
-        str += ", Buy: " + buy;
+        str += ",\n    ";
+        str += "Buy: " + buy;
         str += ", Price: " + price;
-        str += ", CreateTime: " + createTime;
+        str += ",\n    ";
+        str += "CreateTime: " + createTime;
         str += ", ExpireTime: " + expireTime;
-        str += ", Transaction: " + transaction.toString();
+        str += ",\n    ";
+        if (transaction == null) {
+            str += "Transaction: ";
+        } else {
+            str += "Transaction: " + transaction.toString();
+        }
 
         return str;
     }
