@@ -40,7 +40,7 @@ public class API {
                 jsonResponse.append(line);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return jsonResponse.toString();
     }
@@ -57,6 +57,12 @@ public class API {
         URI tempUrl = uri2.resolve("exchange-rates/history?key=" + api2key + "&currency=" + symbol + "&start=" + timeFix(startTime) + "Z&end=" + timeFix(endTime) + "Z");
         String response = getResponse(tempUrl);
         JSON json = new JSON(response);
+        if(json.isEmpty())
+        {
+            return new HashMap<>() {{
+                put(OffsetDateTime.now(), getCryptoValue(OffsetDateTime.now(), symbol));
+            }};
+        }
         JSON fixedJSON = new JSON(json.get("0").toString());
 
         OffsetDateTime timestamp;
@@ -75,10 +81,6 @@ public class API {
             i++;
 
         }
-
-
-
-
         return results;
     }
 
