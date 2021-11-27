@@ -1,121 +1,361 @@
+/**
+ * @author Jeremiah Rhoton
+ * @author Nathan Wilson
+ */
+
 package com.robenhood.gui;
 
+import com.robenhood.model.API;
+import com.robenhood.model.Crypto;
 import com.robenhood.model.Model;
-import com.robenhood.model.Portfolio;
-
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.time.OffsetDateTime;
 
-public class GUIMain extends JDialog {
+/**
+ * Class to handle the displaying of a portfolio
+ */
+public class GUIMain extends JFrame {
     private JPanel contentPane;
     private JButton buttonQuit;
     private JTabbedPane tabbedPane1;
-    private JTextField tickerTextField;
     private JList profileList;
     private JPanel labelPanel;
-    private JLabel profileLabel;
-    private JLabel currentTicker;
-    private JButton changeTicker;
-    private JList tradesList;
-    private JList expList;
+    private JLabel selectedPort;
     private JButton newPortButton;
-    private JButton deleteSelectedPortfolioButton;
+    private JButton deletePortButton;
     private JTextField newPortField;
     private JList assetList;
-    private JButton updateList;
+    private JButton selectPortButton;
+    private JTextField deletePortName;
+    private JList ordersList;
+    private JComboBox orderTypeBox;
+    private JTextField orderCryptoName;
+    private JTextField orderCryptoTicker;
+    private JCheckBox buyBooleanBox;
+    private JTextField orderPriceTextField;
+    private JTextField orderAmountText;
+    private JComboBox orderExpireBox;
+    private JButton addOrderButton;
+    private JButton updateOrdersButton;
+    private JList completedTransactionsList;
+    private JList expiredTransactionsList;
+    private JButton updateTransactionsButton;
+    private JButton updateButton;
+    private JTextField cryptoNameText;
+    private JTextField cryptoTickerText;
+    private JButton getCryptoPriceButton;
+    private JTextField cryptoPriceTextArea;
+    private JButton loadPortfoliosButton;
+    private JTextField addMoneyAmount;
+    private JButton confirmAddMoneyButton;
+    private JTextField portfolioBalanceText;
+    private JTextField portfolioValueText;
+    private JButton saveButton;
+    private JButton selectOrderButton;
+    private JButton cancelOrderButton;
+    private JTextArea selectedOrderText;
 
-    public GUIMain() {
-        setTitle("RoBen Hood");
-        setContentPane(contentPane);
-        Model userModel = new Model();
-        setModal(true);
-        getRootPane().setDefaultButton(buttonQuit);
-        //ArrayList <String> ListData = userModel.getPotentialPortfolios();
-        ArrayList <String> TradeData = new ArrayList<String>();
-        //profileUpdate(ListData);
-        profileUpdate(userModel.getPotentialPortfolios());
-        TradeData.add("Trade1   Value1  Date1   Complete");
-        TradeData.add("Trade2   Value2  Date2   Canceled");
-        TradeData.add("Trade3   Value3  Date3   Incomplete");
-        tradeUpdate(TradeData);
-        //profileLabel.setText(ListData.get(0));
-        tradesList.setListData(TradeData.toArray());
+    private Model model;
 
+    /**
+     * Creates a new GUI given a model and a title
+     * @param aModel The model to be displayed
+     * @param title The title of the window
+     */
+    public GUIMain(Model aModel, String title) {
+        model = aModel;
 
-        profileList.addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                String selection = profileList.getSelectedValue().toString();
-                userModel.setCurrentPortfolio(selection);
-                profileLabel.setText(selection);
-            }
-        });
+        this.setTitle(title);
+        this.setContentPane(contentPane);
+        this.getRootPane().setDefaultButton(buttonQuit);
 
-        buttonQuit.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onQuit();
-            }
-        });
+        initContents();
 
-        // call onQuit() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
+        this.pack();
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        this.setVisible(true);
+    }
+
+    /**
+     * Initializes the contents of the window
+     */
+    private void initContents() {
+        this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 onQuit();
             }
         });
 
-        // call onQuit() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
+        buttonQuit.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 onQuit();
             }
-        }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-        changeTicker.addActionListener(new ActionListener() {
+        });
+
+        selectOrderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tickChange();
+                selectedOrderText.setText(ordersList.getSelectedValue().toString());
+            }
+        });
+
+        cancelOrderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectedOrderText.getText().equals("")) {
+                    JOptionPane.showMessageDialog(contentPane, "Please select an order to cancel");
+                } else {
+                    // Extract creation date from selected order
+                    int beginIndex = selectedOrderText.getText().indexOf("CreateTime: ") + ("CreateTime: ".length());
+                    int endIndex = selectedOrderText.getText().indexOf(",", beginIndex);
+                    String date = selectedOrderText.getText().substring(beginIndex, endIndex);
+                    System.out.println("Removing date: " + date + "\n   Parsed to: " + OffsetDateTime.parse(date));
+                    model.cancelOrder(OffsetDateTime.parse(date));
+                }
+            }
+        });
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                save();
+            }
+        });
+
+        confirmAddMoneyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectedPort.getText().equals("")) {
+                    JOptionPane.showMessageDialog(contentPane, "Please select a portfolio to add money to");
+                } else {
+                    model.incrementCurrentPortfolioBalance(Double.parseDouble(addMoneyAmount.getText()));
+                    update();
+                }
+            }
+        });
+
+        loadPortfoliosButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updatePortfolioList();
+            }
+        });
+
+        updateOrdersButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectedPort.getText().equals("")) {
+                    JOptionPane.showMessageDialog(contentPane, "Please select a portfolio to update orders of");
+                } else {
+                    update();
+                    updateOrdersList();
+                }
+            }
+        });
+
+        updateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                update();
             }
         });
 
         newPortButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                userModel.createNewPortfolio(newPortField.getText());
-                profileUpdate(userModel.getPotentialPortfolios());
+                // Test for empty text first
+                if (!newPortField.getText().equals("")) {
+                    model.createNewPortfolio(newPortField.getText());
+                    update();
+                }
             }
         });
-        deleteSelectedPortfolioButton.addActionListener(new ActionListener() {
+
+        selectPortButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                userModel.deletePortfolio(userModel.getCurrentPortfolioName());
-                profileUpdate(userModel.getPotentialPortfolios());
+                selectedPort.setText(profileList.getSelectedValue().toString());
+                model.setCurrentPortfolio(selectedPort.getText());
+                update();
+            }
+        });
+
+        deletePortButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!deletePortName.getText().equals("")) {
+                    // Cannot delete the selected portfolio
+                    if (selectedPort.getText().equals(deletePortName.getText())) {
+                        JOptionPane.showMessageDialog(contentPane, "Cannot delete the currently selected portfolio \"" + deletePortName.getText() + "\"");
+                    } else {
+                        model.deletePortfolio(deletePortName.getText());
+                        JOptionPane.showMessageDialog(contentPane, "Successfully deleted portfolio \"" + deletePortName.getText() + "\"");
+                        update();
+                    }
+                }
+            }
+        });
+
+        // Adds an order, builds off of all the entered data
+        addOrderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectedPort.getText().equals("")) {
+                    JOptionPane.showMessageDialog(contentPane, "Please select a portfolio to add the order to");
+                } else if (orderCryptoName.getText().equals("")) {
+                    JOptionPane.showMessageDialog(contentPane, "Please enter a crypto name");
+                } else if (orderCryptoTicker.getText().equals("")) {
+                    JOptionPane.showMessageDialog(contentPane, "Please enter a crypto ticker");
+                } else if (orderPriceTextField.getText().equals("")) {
+                    JOptionPane.showMessageDialog(contentPane, "Please enter a price");
+                } else if (orderAmountText.getText().equals("")) {
+                    JOptionPane.showMessageDialog(contentPane, "Please enter an amount, can be set to 0 for market trades");
+                } else {
+                    OffsetDateTime time = OffsetDateTime.now();
+                    switch (orderExpireBox.getSelectedItem().toString()) {
+                        case "1 (day)":
+                            time = time.plusDays(1);
+                            break;
+                        case "2 (days)":
+                            time = time.plusDays(2);
+                            break;
+                        case "3 (days)":
+                            time = time.plusDays(3);
+                            break;
+                        case "4 (days)":
+                            time = time.plusDays(4);
+                            break;
+                        case "5 (days)":
+                            time = time.plusDays(5);
+                            break;
+                        case "6 (days)":
+                            time = time.plusDays(6);
+                            break;
+                        case "7 (days)":
+                            time = time.plusDays(7);
+                            break;
+                        case "2 (weeks)":
+                            time = time.plusWeeks(2);
+                            break;
+                        case "3 (weeks)":
+                            time = time.plusWeeks(3);
+                            break;
+                        case "1 (month)":
+                            time = time.plusWeeks(4);
+                            break;
+                    }
+                    model.addOrder(orderTypeBox.getSelectedItem().toString(), new Crypto(orderCryptoName.getText(), orderCryptoTicker.getText()), buyBooleanBox.isSelected(),
+                            Double.parseDouble(orderPriceTextField.getText()), time, Double.parseDouble(orderAmountText.getText()));
+                    JOptionPane.showMessageDialog(contentPane, "Order successfully added!");
+                }
+            }
+        });
+
+        updateTransactionsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (selectedPort.getText().equals("")) {
+                    JOptionPane.showMessageDialog(contentPane, "Please select a portfolio for which to update transactions");
+                } else {
+                    updateTransactionsList();
+                }
+            }
+        });
+
+        getCryptoPriceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (cryptoNameText.getText().equals("")) {
+                    JOptionPane.showMessageDialog(contentPane, "Please enter a crypto name");
+                } else if (cryptoTickerText.getText().equals("")) {
+                    JOptionPane.showMessageDialog(contentPane, "Please enter the crypto ticker for the name");
+                } else {
+                    cryptoPriceTextArea.setText("$" + API.getCryptoValue(OffsetDateTime.now(), cryptoTickerText.getText()));
+                }
             }
         });
     }
 
-    private void profileUpdate(ArrayList <String> ListData){
-        profileList.setListData(ListData.toArray());
+    /**
+     * Updates the GUI's data
+     */
+    private void update() {
+        if (selectedPort.getText().equals("")) {
+            updatePortfolioList();
+        } else {
+            model.update();
+            updatePortfolioList();
+            updateAssetList();
+            updateOrdersList();
+            updateTransactionsList();
+            updateBalance();
+            updateValue();
+        }
     }
+
+    /**
+     * Function to run before exiting the view
+     */
     private void onQuit() {
-        // add your code here if necessary
+        save();
         dispose();
     }
-    private void tickChange(){
-        currentTicker.setText(tickerTextField.getText());
+
+    /**
+     * Function to save the model's data before closing
+     */
+    private void save() {
+        update();
+        if (!selectedPort.getText().equals("")) {
+            model.saveCurrentPortfolio();
+        }
     }
 
-    private void tradeUpdate(ArrayList <String> TradeData){
-        tradesList.setListData(TradeData.toArray());
+    /**
+     * Updates the portfolio's balance viewer
+     */
+    private void updateBalance() {
+        portfolioBalanceText.setText("$" + model.getCurrentPortfolioBalance());
     }
 
-    public static void main(String[] args) {
-        GUIMain dialog = new GUIMain();
-        dialog.pack();
-        dialog.setVisible(true);
-        System.exit(0);
+    /**
+     * Updates the portfolio's value viewer
+     */
+    private void updateValue() {
+        portfolioValueText.setText("$" + model.getCurrentPortfolioTotalValue());
+    }
+
+    /**
+     * Updates the viewer of the orders
+     */
+    private void updateOrdersList() {
+        ordersList.setListData(model.getCurrentPortfolioOrders().toArray());
+    }
+
+    /**
+     * Updates the viewer of transactions
+     */
+    private void updateTransactionsList() {
+        completedTransactionsList.setListData(model.getCurrentPortfolioCompletedTransactions().toArray());
+        expiredTransactionsList.setListData(model.getCurrentPortfolioExpiredTransactions().toArray());
+    }
+
+    /**
+     * Updates the viewer of transactions
+     */
+    private void updateAssetList() {
+        assetList.setListData(model.getCurrentPortfolioAssets().toArray());
+    }
+
+    /**
+     * Updates the viewer of portfolio list
+     */
+    private void updatePortfolioList() {
+        profileList.setListData(model.getPotentialPortfolios().toArray());
     }
 }
