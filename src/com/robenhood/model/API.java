@@ -15,22 +15,21 @@ import java.util.HashMap;
 
 public class API {
     static URI uri1;
-    static URI uri2;
-    private static String api2key = "";
+    private static String apiKey = "";
     static {
         try {
-            uri1 = new URI("https://api.cryptowat.ch/markets/kraken/");
-            uri2 = new URI("https://api.nomics.com/v1/");
+            uri1 = new URI("https://api.nomics.com/v1/");
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
-        //System.out.println(getHistoryData(OffsetDateTime.now().minusDays(20), OffsetDateTime.now(), "ETH"));
-        //System.out.println(getCryptoValue(OffsetDateTime.now(), "doge"));
+        System.out.println(getHistoryData(OffsetDateTime.now().minusDays(20), OffsetDateTime.now(), "ETH"));
+        Thread.sleep(1000);
+        System.out.println(getCryptoValue(OffsetDateTime.now(), "shib"));
     }
 
     private static String getResponse(URI uri) {
@@ -46,15 +45,16 @@ public class API {
     }
 
     public static double getCryptoValue(OffsetDateTime time, String symbol) {
-        URI tempUrl = uri1.resolve(symbol + "usd/price");
+        URI tempUrl = uri1.resolve("currencies/ticker?key=" + apiKey + "&ids=" + symbol.toUpperCase());
         String response = getResponse(tempUrl);
         JSON json = new JSON(response);
-        JSON result = new JSON(json.get("result").toString());
+        JSON result = new JSON(new JSON(json.get("0").toString()).get("0").toString());
         return (double) result.get("price");
+
     }
 
     public static HashMap<OffsetDateTime, Double> getHistoryData(OffsetDateTime startTime, OffsetDateTime endTime, String symbol) {
-        URI tempUrl = uri2.resolve("exchange-rates/history?key=" + api2key + "&currency=" + symbol + "&start=" + timeFix(startTime) + "Z&end=" + timeFix(endTime) + "Z");
+        URI tempUrl = uri1.resolve("exchange-rates/history?key=" + apiKey + "&currency=" + symbol + "&start=" + timeFix(startTime) + "Z&end=" + timeFix(endTime) + "Z");
         String response = getResponse(tempUrl);
         JSON json = new JSON(response);
         if(json.isEmpty())
