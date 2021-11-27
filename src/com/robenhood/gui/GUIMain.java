@@ -275,7 +275,7 @@ public class GUIMain extends JFrame {
                 } else if (cryptoTickerText.getText().equals("")) {
                     JOptionPane.showMessageDialog(contentPane, "Please enter the crypto ticker for the name");
                 } else {
-                    cryptoPriceTextArea.setText("$" + API.getCryptoValue(OffsetDateTime.now(), cryptoTickerText.getText()));
+                    cryptoPriceTextArea.setText("$" + String.format("%f", API.getCryptoValue(OffsetDateTime.now(), cryptoTickerText.getText())));
                 }
             }
         });
