@@ -1,3 +1,8 @@
+/**
+ * @author Jeremiah Rhoton
+ * @author Nathan Wilson
+ */
+
 package com.robenhood.gui;
 
 import com.robenhood.model.API;
@@ -10,6 +15,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.OffsetDateTime;
 
+/**
+ * Class to handle the displaying of a portfolio
+ */
 public class GUIMain extends JFrame {
     private JPanel contentPane;
     private JButton buttonQuit;
@@ -53,6 +61,11 @@ public class GUIMain extends JFrame {
 
     private Model model;
 
+    /**
+     * Creates a new GUI given a model and a title
+     * @param aModel The model to be displayed
+     * @param title The title of the window
+     */
     public GUIMain(Model aModel, String title) {
         model = aModel;
 
@@ -67,6 +80,9 @@ public class GUIMain extends JFrame {
         this.setVisible(true);
     }
 
+    /**
+     * Initializes the contents of the window
+     */
     private void initContents() {
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -265,6 +281,9 @@ public class GUIMain extends JFrame {
         });
     }
 
+    /**
+     * Updates the GUI's data
+     */
     private void update() {
         if (selectedPort.getText().equals("")) {
             updatePortfolioList();
@@ -279,11 +298,17 @@ public class GUIMain extends JFrame {
         }
     }
 
+    /**
+     * Function to run before exiting the view
+     */
     private void onQuit() {
         save();
         dispose();
     }
 
+    /**
+     * Function to save the model's data before closing
+     */
     private void save() {
         update();
         if (!selectedPort.getText().equals("")) {
@@ -291,27 +316,45 @@ public class GUIMain extends JFrame {
         }
     }
 
+    /**
+     * Updates the portfolio's balance viewer
+     */
     private void updateBalance() {
         portfolioBalanceText.setText("$" + model.getCurrentPortfolioBalance());
     }
 
+    /**
+     * Updates the portfolio's value viewer
+     */
     private void updateValue() {
         portfolioValueText.setText("$" + model.getCurrentPortfolioTotalValue());
     }
 
+    /**
+     * Updates the viewer of the orders
+     */
     private void updateOrdersList() {
         ordersList.setListData(model.getCurrentPortfolioOrders().toArray());
     }
 
+    /**
+     * Updates the viewer of transactions
+     */
     private void updateTransactionsList() {
         completedTransactionsList.setListData(model.getCurrentPortfolioCompletedTransactions().toArray());
         expiredTransactionsList.setListData(model.getCurrentPortfolioExpiredTransactions().toArray());
     }
 
+    /**
+     * Updates the viewer of transactions
+     */
     private void updateAssetList() {
         assetList.setListData(model.getCurrentPortfolioAssets().toArray());
     }
 
+    /**
+     * Updates the viewer of portfolio list
+     */
     private void updatePortfolioList() {
         profileList.setListData(model.getPotentialPortfolios().toArray());
     }
