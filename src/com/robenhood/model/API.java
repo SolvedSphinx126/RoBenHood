@@ -33,6 +33,9 @@ public class API {
     }
 
     private static String getResponse(URI uri) {
+        try {
+            Thread.sleep(1000);//time is in ms (1000 ms = 1 second)
+        } catch (InterruptedException e) {e.printStackTrace();}
         StringBuilder jsonResponse = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(uri.toURL().openStream(), StandardCharsets.UTF_8))) {
             for (String line; (line = reader.readLine()) != null;) {
