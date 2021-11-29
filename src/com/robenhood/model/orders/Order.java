@@ -72,8 +72,8 @@ public abstract class Order implements JSONObject {
     /**
      * Cancels an order
      */
-    public void cancel() {
-        expireTime = OffsetDateTime.now();
+    public void cancel(OffsetDateTime createTime) {
+        expireTime = createTime;
     }
 
     /**

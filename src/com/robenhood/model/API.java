@@ -27,7 +27,7 @@ public class API {
     /**
      * Stores the API key
      */
-    private static String apiKey = "";
+    private static String apiKey = "a53c394099e002dc89c26d3da2fb0377605070b6";
 
     static {
         try {
@@ -80,16 +80,16 @@ public class API {
      * @return The historical data of the specified crypto
      */
     public static HashMap<OffsetDateTime, Double> getHistoryData(OffsetDateTime startTime, OffsetDateTime endTime, String symbol) {
-        URI tempUrl = uri1.resolve("exchange-rates/history?key=" + apiKey + "&currency=" + symbol + "&start=" + timeFix(startTime) + "Z&end=" + timeFix(endTime) + "Z");
+        URI tempUrl = uri1.resolve("exchange-rates/history?key=" + apiKey + "&currency=" + symbol.toUpperCase() + "&start=" + timeFix(startTime) + "Z&end=" + timeFix(endTime) + "Z");
         String response = getResponse(tempUrl);
         JSON json = new JSON(response);
-        if(json.isEmpty())
+        JSON fixedJSON = new JSON(json.get("0").toString());
+        if(fixedJSON.isEmpty())
         {
             return new HashMap<>() {{
                 put(OffsetDateTime.now(), getCryptoValue(OffsetDateTime.now(), symbol));
             }};
         }
-        JSON fixedJSON = new JSON(json.get("0").toString());
 
         OffsetDateTime timestamp;
         double rate;
