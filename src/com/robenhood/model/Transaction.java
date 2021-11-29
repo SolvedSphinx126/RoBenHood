@@ -1,7 +1,3 @@
-/**
- * @author Jeremiah Rhoton
- */
-
 package com.robenhood.model;
 
 import com.robenhood.data.JSON;
@@ -10,6 +6,7 @@ import java.time.OffsetDateTime;
 
 /**
  * Class to handle a transaction object
+ * @author Jeremiah Rhoton
  */
 public class Transaction implements JSONObject {
     private OffsetDateTime time;

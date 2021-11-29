@@ -1,7 +1,3 @@
-/**
- * @author Jeremiah Rhoton
- */
-
 package com.robenhood.model.orders;
 
 import com.robenhood.data.JSON;
@@ -13,6 +9,7 @@ import java.util.Map;
 
 /**
  * A class to handle limit trades
+ * @author Jeremiah Rhoton
  */
 public class LimitTrade extends Order {
     /**

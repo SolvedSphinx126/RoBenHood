@@ -1,7 +1,3 @@
-/**
- * @author Jeremiah Rhoton
- */
-
 package com.robenhood.model;
 
 import com.robenhood.data.FileManager;
@@ -13,6 +9,7 @@ import java.util.Arrays;
 
 /**
  * A model that handles switching portfolio objects
+ * @author Jeremiah Rhoton
  */
 public class Model {
     private Portfolio currentPortfolio;
