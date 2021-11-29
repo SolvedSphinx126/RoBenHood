@@ -8,7 +8,8 @@ import java.nio.file.Path;
 /**
  * The class that manages all the files that contain the info.
  *
- * @author Ben Morrison & Jeremiah Rhoton
+ * @author Ben Morrison
+ * @author Jeremiah Rhoton
  */
 public class FileManager {
 
