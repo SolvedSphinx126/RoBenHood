@@ -209,9 +209,9 @@ public class GUIMain extends JFrame {
                 } else if (orderCryptoTicker.getText().equals("")) {
                     JOptionPane.showMessageDialog(contentPane, "Please enter a crypto ticker");
                 } else if (orderPriceTextField.getText().equals("")) {
-                    JOptionPane.showMessageDialog(contentPane, "Please enter a price");
+                    JOptionPane.showMessageDialog(contentPane, "Please enter a price, can be set to 0 for market trades");
                 } else if (orderAmountText.getText().equals("")) {
-                    JOptionPane.showMessageDialog(contentPane, "Please enter an amount, can be set to 0 for market trades");
+                    JOptionPane.showMessageDialog(contentPane, "Please enter an amount");
                 } else {
                     OffsetDateTime time = OffsetDateTime.now();
                     switch (orderExpireBox.getSelectedItem().toString()) {
