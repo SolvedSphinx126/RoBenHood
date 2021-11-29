@@ -1,9 +1,3 @@
-/**
- *  @author Ben Morrison
- *  Class to interpret JSON and mimic it.
- *
- *  */
-
 package com.robenhood.data;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -12,17 +6,31 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Class to interpret JSON and make storing and loading information easier.
+ *
+ * @author Ben Morrison
+ */
 public class JSON extends HashMap<String, Object> {
 
+    /**
+     * Constructs a new JSON given no save data
+     */
     public JSON() {}
 
+    /**
+     * Constructs a new JSON given save data
+     * @param json The String of JSON code.
+     */
     public JSON(String json) {
         JSON jsonObj = readJSON(trimString(json));
         for (String key: jsonObj.keySet()) {
             this.put(key, jsonObj.get(key));
         }
     }
-
+    /**
+     * Returns the object in JSON code.
+     */
     public String toString() {
         StringBuilder ret = new StringBuilder("{\n");
 
@@ -45,6 +53,12 @@ public class JSON extends HashMap<String, Object> {
 
     }
 
+    /**
+     * This is a static method that helps convert the JSON into how it should be printed in JSON.
+     * For example: a String object will be printed with double-quotes around it.
+     * @param obj The object to be converted to JSON code in a String.
+     * @return The String of JSON code.
+     */
     private static String recursiveToString(Object obj) {
         String value = "";
         if (obj instanceof JSON) {
@@ -71,6 +85,11 @@ public class JSON extends HashMap<String, Object> {
         return value;
     }
 
+    /**
+     * This is a helper construction method that helps convert the JSON code into a JSON object recursively.
+     * @param json The object to be read from JSON code in a String and converted to a JSON object.
+     * @return The JSON object.
+     */
     private static JSON readJSON(String json) {
         json = json.trim();
 
@@ -194,6 +213,11 @@ public class JSON extends HashMap<String, Object> {
         return ret;
     }
 
+    /**
+     * This method is to trim whitespace from the end of each line of JSON code and remove the "\n"s.
+     * @param json The String of JSON code that will be trimmed.
+     * @return The trimmed String of JSON code.
+     */
     private static String trimString(String json) {
         StringBuilder ret = new StringBuilder();
         for (String s: json.split("\n"))
@@ -207,10 +231,21 @@ public class JSON extends HashMap<String, Object> {
         return json;
     }
 
-    private static boolean isBoolean(String s) {
-        return ("true".equals(s) || "false".equals(s));
+    /**
+     * Checks if a String could be converted to a Boolean.
+     * @param string The String being checked.
+     * @return if the String can be converted to Boolean.
+     */
+
+    private static boolean isBoolean(String string) {
+        return ("true".equals(string) || "false".equals(string));
     }
 
+    /**
+     * Checks if a String could be converted to a BigInteger.
+     * @param string The String being checked.
+     * @return if the String can be converted to BigInteger.
+     */
     private static boolean isBigInteger(String string) {
         try {
             new BigInteger(string, 10);
@@ -220,6 +255,11 @@ public class JSON extends HashMap<String, Object> {
         }
     }
 
+    /**
+     * Checks if a String could be converted to an Integer.
+     * @param string The String being checked.
+     * @return if the String can be converted to Integer.
+     */
     private static boolean isInteger(String string) {
         try {
             Integer.parseInt(string);
@@ -229,6 +269,11 @@ public class JSON extends HashMap<String, Object> {
         }
     }
 
+    /**
+     * Checks if a String could be converted to a Double.
+     * @param string The String being checked.
+     * @return if the String can be converted to Double.
+     */
     private static boolean isDouble(String string) {
         try {
             Double.parseDouble(string);
@@ -238,16 +283,22 @@ public class JSON extends HashMap<String, Object> {
         }
     }
 
-    private static Object convert(String s) {
+    /**
+     * Converts a String object to a wrapped primitive.
+     * @param string The String being converted.
+     * @return the converted String.
+     */
+    private static Object convert(String string) {
         // This converts the string to the correct data type
-        if (isBoolean(s)) {
-            return "true".equals(s);
-        } else if (isInteger(s)) {
-            return Integer.parseInt(s);
-        } else if (isDouble(s) && !isBigInteger(s)) {
-            return Double.parseDouble(s);
+        if (isBoolean(string)) {
+            return "true".equals(string);
+        } else if (isInteger(string)) {
+            return Integer.parseInt(string);
+        } else if (isDouble(string) && !isBigInteger(string)) {
+            // Checks BigInt bc that means the int is > Integer.max
+            return Double.parseDouble(string);
         } else {
-            return s;
+            return string;
         }
     }
 

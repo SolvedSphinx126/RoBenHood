@@ -2,7 +2,7 @@ package tests;
 
 import com.robenhood.data.JSON;
 
-public class JSONMain {
+public class TestJSON {
     public static void main(String[] args) {
         String json = "{\n" +
                 "    \"banned\": [\n" +
