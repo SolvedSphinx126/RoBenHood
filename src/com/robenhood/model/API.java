@@ -24,14 +24,6 @@ public class API {
         }
     }
 
-
-    public static void main(String[] args) throws InterruptedException {
-
-        System.out.println(getHistoryData(OffsetDateTime.now().minusDays(20), OffsetDateTime.now(), "ETH"));
-        Thread.sleep(1000);
-        System.out.println(getCryptoValue(OffsetDateTime.now(), "shib"));
-    }
-
     private static String getResponse(URI uri) {
         try {
             Thread.sleep(1000);//time is in ms (1000 ms = 1 second)
