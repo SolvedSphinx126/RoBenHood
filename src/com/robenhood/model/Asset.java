@@ -97,7 +97,7 @@ public class Asset implements JSONObject {
         str += ", Amount: " + amount;
         str += ", Total Cost: " + totalCost;
         str += ",\n    ";
-        str += "Average Value (totalMoneySpent / totalAmountOfCoin): " + getAverageValue();
+        str += "Average Cost: " + getAverageValue();
         return str;
     }
 
