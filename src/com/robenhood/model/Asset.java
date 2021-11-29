@@ -1,7 +1,3 @@
-/**
- * @author Jeremiah Rhoton
- */
-
 package com.robenhood.model;
 
 import com.robenhood.data.JSON;
@@ -11,6 +7,7 @@ import java.time.OffsetDateTime;
 
 /**
  * A class to handle an Asset object
+ * @author Jeremiah Rhoton
  */
 public class Asset implements JSONObject {
     private Crypto coin;

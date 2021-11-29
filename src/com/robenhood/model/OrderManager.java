@@ -1,7 +1,3 @@
-/**
- * @author Jeremiah Rhoton
- */
-
 package com.robenhood.model;
 
 import com.robenhood.data.JSON;
@@ -15,6 +11,7 @@ import java.util.HashMap;
 
 /**
  * A class to handle a portfolio's orders
+ * @author Jeremiah Rhoton
  */
 public class OrderManager implements JSONObject {
     private ArrayList<Order> orders;

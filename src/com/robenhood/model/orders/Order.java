@@ -1,7 +1,3 @@
-/**
- * @author Jeremiah Rhoton
- */
-
 package com.robenhood.model.orders;
 
 import com.robenhood.data.JSON;
@@ -13,6 +9,7 @@ import java.util.HashMap;
 
 /**
  * A class to handle generic orders
+ * @author Jeremiah Rhoton
  */
 public abstract class Order implements JSONObject {
     protected boolean buy;

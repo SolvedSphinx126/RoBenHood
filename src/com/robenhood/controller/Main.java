@@ -1,7 +1,3 @@
-/**
- * @author Jeremiah Rhoton
- */
-
 package com.robenhood.controller;
 
 import com.robenhood.gui.GUIMain;
@@ -9,6 +5,7 @@ import com.robenhood.model.Model;
 
 /**
  * The main entry to the program
+ * @author Jeremiah Rhoton
  */
 public class Main {
     static GUIMain gui;

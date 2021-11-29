@@ -1,7 +1,3 @@
-/**
- * @author Jeremiah Rhoton
- */
-
 package com.robenhood.model.orders;
 
 import com.robenhood.data.JSON;
@@ -12,6 +8,7 @@ import java.util.HashMap;
 
 /**
  * A class to handle market trades
+ * @author Jeremiah Rhoton
  */
 public class MarketTrade extends Order {
     /**

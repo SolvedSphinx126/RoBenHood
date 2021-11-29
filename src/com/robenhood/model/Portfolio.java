@@ -1,7 +1,3 @@
-/**
- * @author Jeremiah Rhoton
- */
-
 package com.robenhood.model;
 
 import com.robenhood.data.JSON;
@@ -12,6 +8,7 @@ import java.util.ArrayList;
 
 /**
  * A class to handle an individual portfolio object
+ * @author Jeremiah Rhoton
  */
 public class Portfolio implements JSONObject {
     private ArrayList<Asset> assets;

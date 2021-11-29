@@ -1,8 +1,3 @@
-/**
- * @author Jeremiah Rhoton
- * @author Nathan Wilson
- */
-
 package com.robenhood.gui;
 
 import com.robenhood.model.API;
@@ -17,6 +12,8 @@ import java.time.OffsetDateTime;
 
 /**
  * Class to handle the displaying of a portfolio
+ * @author Jeremiah Rhoton
+ * @author Nathan Wilson
  */
 public class GUIMain extends JFrame {
     private JPanel contentPane;
