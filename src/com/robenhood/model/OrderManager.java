@@ -68,8 +68,9 @@ public class OrderManager implements JSONObject {
      */
     public void cancelOrder(OffsetDateTime createTime) {
         for (Order o : orders) {
+            System.out.println("Dates are equal: " + o.getCreateTime().toString().equals(createTime.toString()));
             if (o.getCreateTime().toString().equals(createTime.toString())) {
-                o.cancel();
+                o.cancel(createTime);
             }
         }
     }
@@ -113,12 +114,12 @@ public class OrderManager implements JSONObject {
      */
     // Updates all orders of a specific Crypto
     public void updateOrders(Crypto crypto, OffsetDateTime startTime, OffsetDateTime endTime) {
-//        HashMap<OffsetDateTime, Double> data = API.getHistoryData(startTime, endTime, crypto.getSymbol());
-//        for (Order order : orders) {
-//            if (order.getCrypto().equals(crypto)) {
-//                order.makeOrder(data);
-//            }
-//        }
+        HashMap<OffsetDateTime, Double> data = API.getHistoryData(startTime, endTime, crypto.getSymbol());
+        for (Order order : orders) {
+            if (order.getCrypto().equals(crypto)) {
+                order.makeOrder(data);
+            }
+        }
     }
 
     /**
